@@ -1,0 +1,15 @@
+{
+  "name": "vt12-materiaalit",
+  "private": true,
+  "description": "Tuottaa PowerPointin, PDF-esitteen ja karttakuvat vt 12 -sivustosta",
+  "scripts": {
+    "snapshots": "node snapshot_maps.js",
+    "pptx": "node build_pptx.js",
+    "pdf": "node build_pdf.js",
+    "all": "node snapshot_maps.js && node build_pptx.js && node build_pdf.js"
+  },
+  "dependencies": {
+    "pptxgenjs": "^3.12.0",
+    "puppeteer-core": "^23.0.0"
+  }
+}

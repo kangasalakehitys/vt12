@@ -1,0 +1,95 @@
+Luodaan Kangasalan kaupungin vt12 tien edunvalvontaa (Vt 12 Alasjärvi–Huutijärvi ) tukeva html-sivusto, joka skaalautuu mobiiliin. Tarkoituksena on esitellä miksi Vt 12 Alasjärvi–Huutijärvi on Suomen kannattavin yhteysvälihanke. Sivuston materiaali tulee kääntää myös helposti viestintä- ja markkinointimateriaaliksi (powerpoint, pdf ja painoprintti). Käytä Kangasalan brändivärejä ja fontteja esityksessä ja powerpoint-esityksessä taustoja. Tee yksinkertainen, ammattimainen ja asiallinen viestintää tukeva esitys.
+
+Tutki @simulointi.png kuvaa ja tee tästä sivulle graafinen simulaatio, kuinka automäärän kehitys etenee vuodesta 2026 aina vuoteen 2050 kartan päällä. Käytä simulaatioesityksessä oikeaa karttapohjaa, jossa autot(kuvakkeet tai pisteet) liikkuvat kartalla ja määrät kasvavat vuoteen 2050. Anna käyttäjälle mahdollisuus simulaatiossa antaa vuosi, koska tiestä tulee nelikaistainen. Kun tiestä tulee nelikaistainen automäärät simulaatiossa eivät ruuhkaudu tiellä vaan jakautuvat kahdelle kaistalle per suunta. Jos tie on kaksi kaistainen tie ruuhkautuu pahasti. Anna käyttäjälle mahdollisuus pysäyttää simulation tiettyyn vuoteen ja korosta määriä liittymissä ja tiellä. Kartassa @vali.png on oikea karttapohja ja @simuloinnissa on piirretty liittymät nykytila ja tulevaisuus sekä näiden automäärät. Käytä näitä lukumääriä ja kasvata määrät 2026 tasaisesti vuoteen 2050 simulaatiossa. Tee aina karttakuvauksia sovellukseen kuin mahdollista
+
+Sivuston rakennetta ja asiaa tarkemmin:
+
+Hankkeen yleiskuvaus:
+- Kaksikaistaisen (1+1) moottoriliikennetien parantaminen nelikaistaiseksi (2+2)
+- 14 km pitkä tieosuus
+- 8 nykyisen eritasoliittymän parantamista
+- Meluntorjunnan parantamista
+- Jkpp- ja viheryhteyksien parantamista
+
+-- VAIHE
+Tiesuunnittelu loppusuoralla
+Toteutusvalmius 2027
+-- KUSTANNUKSET 
+Kustannusarvio 123 M€ (Kustannusarvio ja kustannusjako tarkentuvat tiesuunnitelmassa keväällä 2027)
+Hyöty-kustannusanalyysissä (H/K) 2,9
+
+-- NÄKYMÄT 
+Pirkanmaan kärkihanke
+IO:n ”varasijalla yksi”
+
+Hankkeen perusteet:
+- Maan vilkkain kaksikaistainen pääväylä
+- Maan kannattavin yhteysvälihanke
+- Päätieverkon pisin sujuvuusongelmainen jakso
+
+- Osa elintärkeää poikittaista kuljetusväylää Rauma–Kouvola (TEN-T, E16, Milmob)
+- Voimakkaasti kasvava maankäyttö ylikuormittaa tieosuuden lähivuosina kestämättömästi
+
+Kapasiteettiin nähden kaksinkertainen liikenne:
+- 1+1 -kaistaisen tien kapasiteetti on noin 9 000 ajoneuvoa vuorokaudessa (Väyläviraston ohjeita 16/2021) 
+- Vt 12:lla KVL on välillä 14 000–21 000
+- Ysitien hankkeen saatua rahoituksen on kyseessä maan vilkkain kaksikaistainen pääväylä ja valtatie
+- Liikennemäärien kasvuennuste 2050 mennessä 35–80 % 
+
+Koko päätieverkon pahin pullonkaula:
+- Vt 12 välillä Tampere–Lahti on maan pisin sujuvuusongelmainen (HCM E-F) tiejakso
+Tarkoittaa käytännössä osuutta Alasjärvi–Huutijärvi
+- Maan viimeisiä kaksikaistateitä, jolla on moottoritietason liikenne
+Ja jäljellä olevista ylivoimaisesti pisin tieosuus
+- Sujuvuus- ja ylikuormituskriteereillä koko maan päätieverkon pahin pullonkaula (https://tieto.traficom.fi/fi/tilastot/maanteiden-paavaylien-ja-muun-paatieverkon-sujuvuusongelmat)
+
+Maan kannattavin yhteysvälihanke:
+- H/K 2,85 on erinomainen kannattavuusluku väylähankkeelle
+- Vertailukelpoisista yhteysvälihankkeista vt 12 on maan ylivoimainen ykkönen
+- Koko maan lähes 200 erilaisesta tiesuunnittelukohteesta vt 12 on sijalla 5
+- Edellä on vain pääkaupunkiseudun sisäisiä hankkeita sekä karkea esisuunnittelulaskelma Lahden seudulta
+Poimi tähän julkaisusta @vj_2026-33_978-952-405-384-6.pdf taulukko sivulta 20. Vt 12 ja vertailukelpoiset hankkeet PRIO-hankearvioinnissa (Investointiohjelman 2027–2034 aineistoa)
+Listaa tähän taulukkoon hankkeet H7K-suhde ja toimivuus lukemat:
+- vt12 Alajärvi-Huutijärvi
+- vt12 Lahti-Kouvola
+- vt4 Vaajakosken kohta
+- vt2 Porin keskusta vt8 tiiliruukin etl
+- vt3 Kannelmäki
+- vt25 Langansböle
+- kt 67 ja vt19 kivisaari
+- vt6 Kouvolan kohta
+- vt12 väli Rissala-Mankala
+- vt 25 Asemantien liittymä
+
+Vt 12 kytkeytyy isoon hankekokonaisuuteen 
+- Kaupunkiseudun kasvu painottuu vahvasti etelään ja itään
+- Kangasala on suhteellisesti koko maan kovimpia kasvajia (top 5)
+- Vt 12:n toteutus on kynnysinvestointi monelle muulle hankkeelle
+- Kaksikaistaisena vt 12 ei mahdollista kasvua
+Tee interaktiivinen kartta @laajempi_kokonaisuus.png kuvasta
+
+Vt 12 ja elinkeinoelämä:
+- Raskas liikenne on vilkasta koko hankealueella, RKVL vaihtelee välillä 650–1000
+- Nelikaistaistuksen peruste jo ilman erittäin vilkasta paikallisliikennettäkin
+- Satamakuljetukset
+- Ruokakuljetukset: alkutuotanto ja jalostus (etenkin Saarioisten Sahalahden tehtaat)
+- Paikallinen teollisuus (Kallio, Lentola, välillisesti mm. Rusko, Tarastenjärvi ja tulevaisuudessa Saarenmaa)
+- Kehä II tulevat jatkeet
+
+Tee karttasimulointi @laajempi_kokonaisuus.png kuvasta, jossa raskasliikenne ja pikkuautoliikenne liikkuu Kallion, Lentolan, Tarastejärven ja Ruskon väliä. Ruokakuljetukset tulevat Sahalahden tehtailta. Teollisuuden rekkaliikenne liikkuu (Kallio, Lentola, välillisesti mm. Rusko, Tarastenjärvi ja tulevaisuudessa Saarenmaa)
+
+Melusuojausta, pyöräväyliä ja taajamaliikenteen rauhoittamista
+- Ulkoilureittien alikulkuja ja pieneläintunneleita
+- Kangasalan seudullinen pääpyörätie (1. vaihe Suorama–Liuttu) kulkee vt12 poikki @pyora.png
+- Kirkkojärven Natura-alueen huomiointi: melun ja tien estevaikutuksen vähentäminen @kirkkojarvi.png
+- Liikenteen mallinnettu vähenemä Kangasalantiellä (st 339) tuhansia ajoneuvoja @st399.png
+- Melusuojaukselle tarvetta pitkin hankealuetta @melusuojaus.png
+Tee tästä koontikartta, jossa asiat näkyvät samalla kartalla karkeasti.
+
+Pirkanmaa ja sotilaallinen liikkuvuus
+- Pohjoismaisen varautumisstrategian kuljetuskäytävät
+
+Väyläverkon kehittämisessä tulisi keskittyä ainoastaan niihin hankkeisiin, joissa Väyläviraston laskentamenetelmien mukaan hyvä hyöty-kustannussuhde ja jotka ovat siten yhteiskunnallisesti kannattavia investointihankkeita.
+
+Lähdemateriaalia: 
+@Vt 12 Alasjärvi-Huutijärvi esittelymateriaali 2026.pptx
