@@ -158,6 +158,11 @@
       text: 'Väyläverkon kehittämisessä tulisi keskittyä ainoastaan niihin hankkeisiin, joilla on Väyläviraston laskentamenetelmien mukaan hyvä hyöty-kustannussuhde ja jotka ovat siten yhteiskunnallisesti kannattavia investointihankkeita.',
       punch: 'Vt 12 Alasjärvi–Huutijärvi: H/K 2,85.',
       contact: 'Kangasalan kaupunki · kangasala.fi'
+    },
+
+    share: {
+      label: 'Jaa artikkeli',
+      text: 'Vt 12 Alasjärvi–Huutijärvi – Suomen kannattavin yhteysvälihanke (H/K 2,85)'
     }
   };
 

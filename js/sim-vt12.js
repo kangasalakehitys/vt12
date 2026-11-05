@@ -9,6 +9,7 @@
   const GAP = 105;         // pienin väli autojen välillä, m
   const DIVISOR = 1500;    // ajon./vrk per suunta → autoja / km
   const YEARS_PER_SEC = 0.6;
+  const TRUCK_JAM = '#00FFFF';  // rekka ruuhkassa
 
   function el(id) { return document.getElementById(id); }
 
@@ -83,7 +84,7 @@
       playing: false,
       speed: 1,
       upgradeYear: 2030,
-      labels: false,
+      labels: null,   // null = automaattinen (näkyy tauolla), true/false = käyttäjän valinta
       four: false
     };
 
@@ -292,8 +293,11 @@
         const o = laneW * (0.9 + c.off * (four ? 1.05 : 0)) + (four ? 2 * k : 0);
         const x = pt.x + nx * o, y = pt.y + ny * o;
         if (c.truck) {
+          // Rekka on cyan ruuhkaisella osuudella, oranssi sujuvassa liikenteessä.
+          const jam = !four && targets[segAt(c.s)].load > 1;
           ctx.save(); ctx.translate(x, y); ctx.rotate(Math.atan2(dy, dx));
-          ctx.fillStyle = BRAND.orange; ctx.fillRect(-3.2 * k, -1.4 * k, 6.4 * k, 2.8 * k);
+          ctx.fillStyle = jam ? TRUCK_JAM : BRAND.orange; ctx.fillRect(-3.2 * k, -1.4 * k, 6.4 * k, 2.8 * k);
+          if (jam) { ctx.strokeStyle = '#0b5563'; ctx.lineWidth = 0.7; ctx.strokeRect(-3.2 * k, -1.4 * k, 6.4 * k, 2.8 * k); }
           ctx.restore();
         } else {
           ctx.fillStyle = BRAND.navy;
@@ -340,13 +344,14 @@
 
       const y = Math.floor(state.year);
       ui.year.textContent = y;
-      ui.slider.value = state.year;
+      ui.slider.value = y;
       ui.slider.setAttribute('aria-valuetext', y);
+      const showNums = labelsOn();
 
       casing.setStyle({ weight: four ? 17 : 9 });
       S.forEach((seg, i) => {
         const tg = targets[i];
-        segLines[i].setStyle({ color: loadColor(tg.load, four), weight: four ? 13 : (state.labels ? 8 : 6), opacity: state.labels ? 0.7 : 0.45 });
+        segLines[i].setStyle({ color: loadColor(tg.load, four), weight: four ? 13 : (showNums ? 8 : 6), opacity: showNums ? 0.7 : 0.45 });
         segLabels[i].setContent(`<b>${fmt(tg.kvl)}</b><span>${fmt(tg.ras)}</span>`);
       });
       let bi = 0;
@@ -354,7 +359,7 @@
         const [kvl, ras] = val(b);
         branchLabels[bi++].setContent(`<b>${fmt(kvl)}</b><span>${fmt(ras)}</span>`);
       }));
-      jMarkers.forEach(m => m.setRadius(state.labels ? 9 : 7));
+      jMarkers.forEach(m => m.setRadius(showNums ? 9 : 7));
 
       const main = targets.slice(1, 8);
       const lens = S.slice(1, 8).map(x => x.len);
@@ -370,9 +375,11 @@
         ? 'Nelikaistainen 2+2 – liikenne sujuu'
         : (loadBad ? 'Kaksikaistainen 1+1 – tie ruuhkautuu' : 'Kaksikaistainen 1+1');
 
-      showLabels(state.labels || !state.playing);
+      showLabels(showNums);
+      ui.labels.checked = showNums;
     }
 
+    function labelsOn() { return state.labels === null ? !state.playing : state.labels; }
     let labelsShown = false;
     function showLabels(on) {
       if (on === labelsShown) return;
@@ -412,7 +419,7 @@
     }
 
     ui.play.addEventListener('click', () => setPlaying(!state.playing));
-    ui.slider.addEventListener('input', () => { setPlaying(false); setYear(+ui.slider.value); });
+    ui.slider.addEventListener('input', () => { const y = +ui.slider.value; setPlaying(false); setYear(y); });
     ui.speed.addEventListener('change', () => { state.speed = +ui.speed.value; });
     ui.upgrade.addEventListener('change', () => {
       const v = Math.max(2027, Math.min(2050, +ui.upgrade.value || 2030));
@@ -426,6 +433,9 @@
       refresh();
     });
     ui.labels.addEventListener('change', () => { state.labels = ui.labels.checked; refresh(); });
+    root.querySelectorAll('[data-sim-step]').forEach(b => b.addEventListener('click', () => {
+      setPlaying(false); setYear(Math.floor(state.year) + +b.dataset.simStep); prefill();
+    }));
     ui.reset && ui.reset.addEventListener('click', fit);
     root.querySelectorAll('[data-sim-year]').forEach(b => b.addEventListener('click', () => {
       setPlaying(false); setYear(+b.dataset.simYear); prefill();

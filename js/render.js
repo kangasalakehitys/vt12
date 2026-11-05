@@ -51,8 +51,38 @@
     growthBullets: () => li(C.growth.bullets),
     businessBullets: () => li(C.business.bullets),
     envBullets: () => li(C.environment.bullets),
-    defenceBullets: () => li(C.defence.bullets)
+    defenceBullets: () => li(C.defence.bullets),
+    share: () => {
+      const url = location.href.split('#')[0];
+      const u = encodeURIComponent(url), t = encodeURIComponent(C.share.text);
+      const links = [
+        ['LinkedIn', `https://www.linkedin.com/sharing/share-offsite/?url=${u}`],
+        ['Facebook', `https://www.facebook.com/sharer/sharer.php?u=${u}`],
+        ['X', `https://x.com/intent/post?url=${u}&text=${t}`],
+        ['WhatsApp', `https://wa.me/?text=${t}%20${u}`],
+        ['Sähköposti', `mailto:?subject=${t}&body=${u}`]
+      ];
+      return `<span class="share__label">${esc(C.share.label)}:</span>` +
+        (navigator.share ? '<button type="button" class="share__btn" data-share="native">Jaa…</button>' : '') +
+        links.map(([n, h]) => `<a class="share__btn" href="${h}"${h.startsWith('mailto') ? '' : ' target="_blank" rel="noopener"'}>${n}</a>`).join('') +
+        '<button type="button" class="share__btn" data-share="copy">Kopioi linkki</button>';
+    }
   };
+
+  function shareActions() {
+    document.addEventListener('click', e => {
+      const b = e.target.closest('[data-share]');
+      if (!b) return;
+      const url = location.href.split('#')[0];
+      if (b.dataset.share === 'native') {
+        navigator.share({ title: document.title, text: C.share.text, url }).catch(() => {});
+      } else {
+        const done = () => { const old = b.textContent; b.textContent = 'Kopioitu ✓'; setTimeout(() => { b.textContent = old; }, 1800); };
+        if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, () => prompt('Kopioi linkki:', url));
+        else prompt('Kopioi linkki:', url);
+      }
+    });
+  }
 
   function render() {
     document.querySelectorAll('[data-c]').forEach(el => { const v = get(el.dataset.c); if (v != null) el.textContent = v; });
@@ -68,5 +98,5 @@
     navEl.addEventListener('click', e => { if (e.target.tagName === 'A') { btn.setAttribute('aria-expanded', 'false'); navEl.classList.remove('is-open'); } });
   }
 
-  document.addEventListener('DOMContentLoaded', () => { render(); nav(); });
+  document.addEventListener('DOMContentLoaded', () => { render(); nav(); shareActions(); });
 })();

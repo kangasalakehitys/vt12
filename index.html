@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Vt 12 Alasjärvi–Huutijärvi – Suomen kannattavin yhteysvälihanke</title>
   <meta name="description" content="Vt 12 Alasjärvi–Huutijärvi: maan vilkkain kaksikaistainen pääväylä parannetaan nelikaistaiseksi. H/K 2,85, toteutusvalmius 2027.">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Vt 12 Alasjärvi–Huutijärvi – Suomen kannattavin yhteysvälihanke">
+  <meta property="og:description" content="Maan vilkkain kaksikaistainen pääväylä parannetaan nelikaistaiseksi. H/K 2,85, toteutusvalmius 2027.">
+  <meta property="og:url" content="https://kangasalakehitys.github.io/vt12/">
+  <meta property="og:image" content="https://kangasalakehitys.github.io/vt12/downloads/img/sim_2050_1plus1.png">
+  <meta property="og:locale" content="fi_FI">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -36,6 +43,7 @@
         <h1 class="hero__title" data-c="hero.title"></h1>
         <p class="hero__lead" data-c="hero.lead"></p>
         <ul class="stats" data-render="heroStats"></ul>
+        <div class="share" data-render="share"></div>
       </div>
     </section>
 
@@ -84,7 +92,8 @@
             <div class="sim__yearbadge"><span data-sim="year">2026</span></div>
             <div class="sim__legend">
               <span><i class="dot dot--car"></i>Henkilöauto</span>
-              <span><i class="dot dot--truck"></i>Raskas ajoneuvo (korostettu)</span>
+              <span><i class="dot dot--truck"></i>Raskas ajoneuvo, sujuva</span>
+              <span><i class="dot dot--truck dot--truck-jam"></i>Raskas ajoneuvo ruuhkassa</span>
               <span><i class="bar bar--green"></i>Sujuva</span>
               <span><i class="bar bar--yellow"></i>Lähellä kapasiteettia</span>
               <span><i class="bar bar--orange"></i>Ylikuormitettu</span>
@@ -100,10 +109,15 @@
                 <select data-sim="speed"><option value="1">1×</option><option value="2">2×</option><option value="4">4×</option></select>
               </label>
             </div>
-            <label class="field">Vuosi
-              <input type="range" min="2026" max="2050" step="0.01" value="2026" data-sim="slider" aria-label="Simulaation vuosi">
+            <div class="field">
+              <span>Vuosi (vuosi kerrallaan)</span>
+              <div class="yearstep">
+                <button type="button" class="chip" data-sim-step="-1" aria-label="Edellinen vuosi">‹</button>
+                <input type="range" min="2026" max="2050" step="1" value="2026" data-sim="slider" aria-label="Simulaation vuosi">
+                <button type="button" class="chip" data-sim-step="1" aria-label="Seuraava vuosi">›</button>
+              </div>
               <span class="ticks"><span>2026</span><span>2030</span><span>2035</span><span>2040</span><span>2045</span><span>2050</span></span>
-            </label>
+            </div>
             <div class="quick">
               <span>Pysäytä vuoteen:</span>
               <button class="chip" data-sim-year="2026">2026</button>
@@ -116,7 +130,7 @@
                 <input type="number" min="2027" max="2050" value="2030" data-sim="upgrade" inputmode="numeric">
               </label>
               <label class="check"><input type="checkbox" data-sim="never"> Ei toteuteta (vertailu)</label>
-              <label class="check"><input type="checkbox" data-sim="labels"> Näytä luvut koko ajan</label>
+              <label class="check"><input type="checkbox" data-sim="labels"> Näytä luvut kartalla</label>
             </div>
             <dl class="kpis">
               <div><dt>Vilkkain osuus</dt><dd><span data-sim="maxkvl">–</span> <small>ajon./vrk</small></dd></div>
@@ -257,17 +271,16 @@
         <h2 data-c="closing.title"></h2>
         <p class="closing__text" data-c="closing.text"></p>
         <p class="closing__punch" data-c="closing.punch"></p>
+        <div class="share" data-render="share"></div>
       </div>
     </section>
 
     <section class="section" id="materiaalit">
       <div class="wrap">
         <h2>Materiaalit</h2>
-        <p>Sivuston sisältö on saatavilla esityksenä ja tulostettavana esitteenä.</p>
+        <p>Sivuston sisältö on saatavilla PowerPoint-esityksenä.</p>
         <div class="downloads">
           <a class="btn btn--primary" href="downloads/Vt12_Alasjarvi-Huutijarvi_esitys.pptx" download>Lataa esitys (PowerPoint)</a>
-          <a class="btn btn--ghost" href="downloads/Vt12_Alasjarvi-Huutijarvi_esite.pdf" download>Lataa esite (PDF, A4)</a>
-          <button class="btn btn--ghost" onclick="window.print()">Tulosta sivu</button>
         </div>
       </div>
     </section>
