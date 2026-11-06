@@ -34,7 +34,11 @@
     const J = T.junctions.map(j => {
       const s = path.project(j.lat, j.lng);
       const p = path.at(s);
-      const branches = j.branches.map(b => {
+      // Haarat seuraavat OSM:n ramppeja ja liittyvää tietä (data/roads.js); varalla suora viiva.
+      const osm = window.ROADS && window.ROADS.junctions[j.id];
+      const branches = j.branches.map((b, bi) => {
+        const ll = osm && osm.branches[bi];
+        if (ll) return Object.assign({}, b, { path: new Path(ll) });
         const end = offsetLL(p[0], p[1], b.bearing, b.len);
         return Object.assign({}, b, { path: new Path([[p[0], p[1]], end]) });
       });
@@ -57,6 +61,11 @@
 
     const casing = L.polyline(path.latlngs, { color: '#4b5563', weight: 9, opacity: 0.4, lineCap: 'round', interactive: false }).addTo(map);
     const segLines = S.map(seg => L.polyline(path.slice(seg.s0, seg.s1), { weight: 6, opacity: 0.45, lineCap: 'butt', interactive: false }).addTo(map));
+    // Liittymien rampit ohuina viivoina.
+    J.forEach(j => {
+      const osm = window.ROADS && window.ROADS.junctions[j.id];
+      if (osm) osm.ramps.forEach(r => L.polyline(r, { color: '#6b7280', weight: 2.5, opacity: 0.7, interactive: false }).addTo(map));
+    });
     const branchLines = [];
     J.forEach(j => j.branches.forEach(b => {
       branchLines.push(L.polyline(b.path.latlngs, { color: '#6b7280', weight: 4, opacity: 0.6, interactive: false }).addTo(map));
@@ -67,15 +76,17 @@
 
     // Pysyvät numerotarrat (näkyvät tauolla tai kun valittu).
     const segLabels = S.map(seg => {
-      const mid = path.at((seg.s0 + seg.s1) / 2);
-      return L.tooltip({ permanent: true, direction: 'top', offset: [16, -10], className: 'sim-label sim-label--road', pane: 'labels' }).setLatLng([mid[0], mid[1]]);
+      // labelAt/labelDir (traffic.js) siirtävät tarran pois haaratarrojen alta.
+      const mid = path.at(seg.s0 + (seg.s1 - seg.s0) * (seg.labelAt ?? 0.5));
+      const below = seg.labelDir === 'bottom';
+      return L.tooltip({ permanent: true, direction: below ? 'bottom' : 'top', offset: [16, below ? 10 : -10], className: 'sim-label sim-label--road', pane: 'labels' }).setLatLng([mid[0], mid[1]]);
     });
     const branchLabels = [];
     J.forEach(j => j.branches.forEach(b => {
-      const end = b.path.latlngs[1];
+      const end = b.path.latlngs[b.path.latlngs.length - 1];
       branchLabels.push(L.tooltip({ permanent: true, direction: 'center', className: 'sim-label sim-label--branch', pane: 'labels' }).setLatLng(end));
     }));
-    const jLabels = J.map(j => L.tooltip({ permanent: true, direction: 'bottom', offset: [-8, 12], className: 'sim-label sim-label--junction', pane: 'labels' })
+    const jLabels = J.map(j => L.tooltip({ permanent: true, direction: j.labelDir || 'bottom', offset: ({ left: [-12, 0], top: [0, -12] })[j.labelDir] || [-8, 12], className: 'sim-label sim-label--junction', pane: 'labels' })
       .setLatLng(j.ll).setContent(j.name));
 
     // --- Tila ---------------------------------------------------------------

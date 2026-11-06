@@ -8,19 +8,14 @@
   const V0 = 520;            // m/s simulaatiossa
   const YEARS_PER_SEC = 0.5;
 
-  const P = {
+  // Paikat ja reitit OpenStreetMapista (data/roads.js, tools/build_roads.js).
+  const R = window.ROADS;
+  const P = Object.assign({
     tampere: [61.4978, 23.7610],
-    tarastenjarvi: [61.5400, 23.8980],
-    rusko: [61.4520, 23.8878],
-    lentola: [61.4705, 23.9900],
-    kallio: [61.4835, 23.9965],
-    saarenmaa: [61.4514, 23.9412],
-    sahalahti: [61.4808, 24.3225],
-    kangasala: [61.4640, 24.0700],
-    lamminrahka: [61.5135, 23.9210],
-    west: [61.5030, 23.6400],
-    east: [61.4250, 24.2200]
-  };
+    west: [61.5030, 23.6400]
+  }, R.places);
+  const EAST = R.routes.vt12_east;
+  P.east = EAST[Math.round(EAST.length * 0.6)];
 
   const PLACES = [
     { at: P.tarastenjarvi, name: 'Tarastenjärvi', kind: 'industry' },
@@ -41,8 +36,32 @@
     const sStart = 0, sEnd = vt.length;
     const projStart = J[0], projEnd = J[7];
 
-    // Reitin rakentaja: osat ovat pisteitä [lat,lng] tai {vt:[s0,s1]} (vt 12 -linjaa pitkin).
-    function route(parts) {
+    // Reitin osat:
+    //  [lat,lng]            yksittäinen piste
+    //  {vt:[s0,s1]}         vt 12 -linjaa pitkin; null = jatka edellisestä / seuraavaan osaan
+    //  {osm:key, a, b}      OSM-reitti ROADS.routes[key]; a/b = 'start' | 'end' | 'prev' | 'next'
+    function firstLL(part) { return Array.isArray(part) ? part : part.ll[0]; }
+    function lastLL(part) { return Array.isArray(part) ? part : part.ll[part.ll.length - 1]; }
+    function resolve(parts) {
+      const out = parts.map(p => Array.isArray(p) ? p : p.vt ? { vt: p.vt.slice() } : Object.assign({}, p, { path: new Path(R.routes[p.osm]) }));
+      const pos = (p, v, other) => v === 'start' ? 0 : v === 'end' ? p.path.length : p.path.project(other[0], other[1]);
+      // 2) Kiinteät osat ensin, sitten vt-osat ja viittaukset naapureihin.
+      out.forEach(p => { if (p.osm && !/prev|next/.test(p.a + p.b)) p.ll = p.path.slice(pos(p, p.a || 'start'), pos(p, p.b || 'end')); });
+      out.forEach((p, i) => {
+        if (!p.vt) return;
+        const s0 = p.vt[0] !== null ? p.vt[0] : vt.project(...lastLL(out[i - 1]));
+        const s1 = p.vt[1] !== null ? p.vt[1] : vt.project(...firstLL(out[i + 1]));
+        p.ll = vt.slice(s0, s1); p.onVt = true;
+      });
+      out.forEach((p, i) => {
+        if (!p.osm || p.ll) return;
+        const ref = v => v === 'prev' ? lastLL(out[i - 1]) : v === 'next' ? firstLL(out[i + 1]) : null;
+        p.ll = p.path.slice(pos(p, p.a || 'start', ref(p.a)), pos(p, p.b || 'end', ref(p.b)));
+      });
+      return out;
+    }
+    function route(rawParts) {
+      const parts = resolve(rawParts).map(p => Array.isArray(p) ? p : (p.onVt ? { vtll: p.ll } : p.ll));
       const ll = [];
       const onVt = [];
       let d = 0;
@@ -56,10 +75,10 @@
         ll.push(p); prev = p;
       };
       parts.forEach(part => {
-        if (Array.isArray(part)) add(part, false);
+        if (Array.isArray(part) && typeof part[0] === 'number') add(part, false);
+        else if (Array.isArray(part)) part.forEach(p => add(p, false));
         else {
-          const [a, b] = part.vt;
-          vt.slice(a, b).forEach((p, i) => {
+          part.vtll.forEach((p, i) => {
             // Merkitään vt 12 -hankeosuudelle osuvat pätkät.
             const s = vt.project(p[0], p[1]);
             const inProject = s >= projStart - 50 && s <= projEnd + 50;
@@ -73,58 +92,59 @@
       onVt.forEach(r => { const m = merged[merged.length - 1]; if (m && r[0] - m[1] < 1) m[1] = r[1]; else merged.push(r.slice()); });
       return { path, onVt: merged };
     }
-    const both = (def) => [def, Object.assign({}, def, { parts: def.parts.slice().reverse().map(p => Array.isArray(p) ? p : { vt: [p.vt[1], p.vt[0]] }) })];
+    const flip = v => ({ prev: 'next', next: 'prev' })[v] || v;
+    const revPart = p => Array.isArray(p) ? p : p.vt ? { vt: [p.vt[1], p.vt[0]] } : Object.assign({}, p, { a: flip(p.b || 'end'), b: flip(p.a || 'start') });
+    const both = (def) => [def, Object.assign({}, def, { parts: def.parts.slice().reverse().map(revPart) })];
 
-    const vt9 = [[61.5130, 23.8620], [61.5270, 23.8810]];
-    const ruskoLink = [[61.4650, 23.8780], [61.4840, 23.8560], [61.4960, 23.8490]];
-    const sahaRoad = [[61.4700, 24.2600], [61.4560, 24.1800], [61.4460, 24.1350]];
+    // OSM-reitit (paikka → rampit → vt 12). Takaperin: { osm, a: 'end', b: 'start' } = vt 12:lta paikkaan.
+    const from = key => ({ osm: key });
+    const to = key => ({ osm: key, a: 'end', b: 'start' });
+    const VT = { vt: [null, null] };   // vt 12 edellisen ja seuraavan osan välillä
+    // Kehä II:n tulevat jatkeet (ei vielä tieverkossa, piirretty karkeasti).
     const ke2East = [[61.4900, 23.9620], [61.5100, 23.9500], [61.5300, 23.9300]];
     const ke2South = [[61.4580, 23.9580], [61.4660, 23.9750]];
-    const lrLink = [[61.5040, 23.9330]];
 
     const defs = [
       // Teollisuuden rekat
       ...both({ layer: 'industry', color: BRAND.orange, rate: 0.9, truck: true,
-        parts: [P.tarastenjarvi, ...vt9.slice().reverse(), { vt: [J[0], J[4]] }, P.lentola] }),
+        parts: [from('tarastenjarvi_vt12'), VT, to('lentola_vt12')] }),
       ...both({ layer: 'industry', color: BRAND.orange, rate: 0.6, truck: true,
-        parts: [P.rusko, ...ruskoLink, { vt: [J[0], J[4]] }, [61.4790, 23.9890], P.kallio] }),
+        parts: [from('rusko_vt12'), VT, to('kallio_vt12')] }),
       ...both({ layer: 'industry', color: BRAND.orange, rate: 0.5, truck: true,
-        parts: [P.kallio, [61.4790, 23.9890], { vt: [J[4], sStart] }, P.tampere, P.west] }),
+        parts: [from('kallio_vt12'), { vt: [null, sStart] }, P.tampere, P.west] }),
       // Tuleva Saarenmaa ja Kehä II
       ...both({ layer: 'future', color: BRAND.orange, rate: 0.5, truck: true, from: 2032,
         parts: [P.saarenmaa, ...ke2South, P.lentola] }),
       ...both({ layer: 'future', color: BRAND.orange, rate: 0.4, truck: true, from: 2035,
-        parts: [P.lentola, { vt: [J[4], J[3]] }, ...ke2East, P.tarastenjarvi] }),
-      // Ruokakuljetukset Sahalahdelta
+        parts: [from('lentola_vt12'), { vt: [null, J[3]] }, ...ke2East, P.tarastenjarvi] }),
+      // Ruokakuljetukset Sahalahdelta: Sahalahdentie → Huutijärven etl → vt 12
       { layer: 'food', color: BRAND.green, rate: 0.7, truck: true,
-        parts: [P.sahalahti, ...sahaRoad, { vt: [sEnd, J[0]] }, ...vt9, P.tarastenjarvi] },
-      { layer: 'food', color: BRAND.green, rate: 0.7, truck: true,
-        parts: [P.sahalahti, ...sahaRoad, { vt: [sEnd, sStart] }, P.tampere, P.west] },
-      { layer: 'food', color: BRAND.green, rate: 0.5, truck: true,
-        parts: [P.west, P.tampere, { vt: [sStart, sEnd] }, ...sahaRoad.slice().reverse(), P.sahalahti] },
-      // Satamakuljetukset Rauma–Kouvola
+        parts: [from('sahalahti_vt12'), VT, to('tarastenjarvi_vt12')] },
+      ...both({ layer: 'food', color: BRAND.green, rate: 0.7, truck: true,
+        parts: [from('sahalahti_vt12'), { vt: [null, sStart] }, P.tampere, P.west] }),
+      // Satamakuljetukset Rauma–Kouvola: vt 12 jatkuu Huutijärveltä Lahden suuntaan
       ...both({ layer: 'port', color: BRAND.yellow, rate: 0.6, truck: true,
-        parts: [P.west, P.tampere, { vt: [sStart, sEnd] }, P.east] }),
+        parts: [P.west, P.tampere, { vt: [sStart, sEnd] }, { osm: 'vt12_east', a: 'prev', b: 'end' }] }),
       // Lamminrahka–Ojala: kasvava asuinalue, liikenne Lamminrahkan etl:n kautta (kasvaa rakentumisen myötä)
       ...both({ layer: 'growth', color: GROWTH, rate: 1.4, truck: false, ramp: true,
-        parts: [P.lamminrahka, ...lrLink, { vt: [J[2], sStart] }, P.tampere] }),
+        parts: [from('lamminrahka_vt12'), { vt: [null, sStart] }, P.tampere] }),
       ...both({ layer: 'growth', color: GROWTH, rate: 0.9, truck: false, ramp: true,
-        parts: [P.lamminrahka, ...lrLink, { vt: [J[2], J[6]] }, P.kangasala] }),
+        parts: [from('lamminrahka_vt12'), VT, to('kangasala_vt12')] }),
       ...both({ layer: 'growth', color: GROWTH, rate: 0.35, truck: true, ramp: true,
-        parts: [P.lamminrahka, ...lrLink, { vt: [J[2], J[4]] }, [61.4790, 23.9890], P.kallio] }),
+        parts: [from('lamminrahka_vt12'), VT, to('kallio_vt12')] }),
       // Henkilöautot
       ...both({ layer: 'cars', color: BRAND.navy, rate: 3.2, truck: false,
-        parts: [P.tampere, { vt: [sStart, sEnd] }, P.east] }),
+        parts: [P.tampere, { vt: [sStart, sEnd] }, { osm: 'vt12_east', a: 'prev', b: 'end' }] }),
       ...both({ layer: 'cars', color: BRAND.navy, rate: 1.6, truck: false,
-        parts: [P.tampere, { vt: [sStart, J[6]] }, P.kangasala] }),
+        parts: [P.tampere, { vt: [sStart, null] }, to('kangasala_vt12')] }),
       ...both({ layer: 'cars', color: BRAND.navy, rate: 0.8, truck: false,
-        parts: [P.rusko, ...ruskoLink, { vt: [J[0], J[4]] }, P.lentola] })
+        parts: [from('rusko_vt12'), VT, to('lentola_vt12')] })
     ];
     const routes = defs.map(d => Object.assign({}, d, route(d.parts), { acc: Math.random() }));
 
     // --- Kartan tasot --------------------------------------------------------
     const groups = { industry: L.layerGroup(), food: L.layerGroup(), port: L.layerGroup(), cars: L.layerGroup(), future: L.layerGroup(), growth: L.layerGroup() };
-    L.polygon(ellipse(P.lamminrahka[0], P.lamminrahka[1], 1900, 1500, 20), { color: GROWTH, weight: 2, dashArray: '6 5', fillColor: BRAND.yellow, fillOpacity: 0.25, interactive: false }).addTo(groups.growth);
+    L.polygon(ellipse(P.lamminrahka[0], P.lamminrahka[1], 1200, 750, 15), { color: GROWTH, weight: 2, dashArray: '6 5', fillColor: BRAND.yellow, fillOpacity: 0.25, interactive: false }).addTo(groups.growth);
     L.polyline(vt.latlngs, { color: '#374151', weight: 7, opacity: 0.5 }).addTo(map);
     const projLine = L.polyline(vt.slice(projStart, projEnd), { color: BRAND.red, weight: 5, opacity: 0.85 }).addTo(map)
       .bindTooltip('Vt 12 Alasjärvi–Huutijärvi', { sticky: true });
@@ -151,7 +171,7 @@
         .addTo(map);
     });
 
-    map.fitBounds(L.latLngBounds([P.tarastenjarvi, P.sahalahti, P.tampere, [61.445, 23.88], [61.528, 23.92]]), { padding: [10, 10] });
+    map.fitBounds(L.latLngBounds([P.tarastenjarvi, P.sahalahti, P.tampere, P.east, [61.445, 23.88]]), { padding: [10, 10] });
 
     // --- Tila -------------------------------------------------------------
     const state = { year: T.startYear, playing: false, four: false, layers: { industry: true, food: true, port: true, cars: true, future: true, growth: true } };

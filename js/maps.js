@@ -3,6 +3,8 @@
 (function () {
   const { BRAND, Path, offsetLL, ellipse, baseMap, vt12Path } = window.MapKit;
   const T = window.TRAFFIC;
+  const R = window.ROADS;   // OSM-geometriat (data/roads.js)
+  const JL = id => { const j = T.junctions.find(x => x.id === id); return [j.lat, j.lng]; };
 
   function card(title, body) { return `<div class="map-card"><h4>${title}</h4><p>${body}</p></div>`; }
 
@@ -33,7 +35,7 @@
     projectLine(map, vt).on('click', () => show(card('Vt 12 Alasjärvi–Huutijärvi', 'Kaksikaistainen tie on kasvun pullonkaula. Nelikaistaistus on kynnysinvestointi alueen muille hankkeille.')));
 
     const areas = [
-      { c: [61.5135, 23.9210], rx: 1900, ry: 1500, rot: 20, color: BRAND.yellow, title: 'Lamminrahka–Ojala', label: 'Lamminrahka–Ojala · 12 000 as.', body: 'Uusi asuinalue noin 12 000 asukkaalle. Liikenne kytkeytyy vt 12:een Lamminrahkan eritasoliittymän kautta.' },
+      { c: R.places.lamminrahka, rx: 1200, ry: 750, rot: 15, color: BRAND.yellow, title: 'Lamminrahka–Ojala', label: 'Lamminrahka–Ojala · 12 000 as.', body: 'Uusi asuinalue noin 12 000 asukkaalle. Liikenne kytkeytyy vt 12:een Lamminrahkan eritasoliittymän kautta.' },
       { c: [61.4520, 23.9300], rx: 2000, ry: 1300, rot: -10, color: '#8b5e3c', title: 'Saarenmaan alue', label: 'Saarenmaa · 7 300 as. · 4 000 tp', body: 'Noin 7 300 asukasta ja 4 000 työpaikkaa. Yhteys vt 12:lle Kehä II:n Rusko–Lentola-jatkeen kautta.' },
       { c: [61.4560, 24.0780], rx: 3800, ry: 1700, rot: -28, color: BRAND.green, title: 'Keskustan uudistaminen ja taajaman laajentaminen', label: 'Keskustan uudistaminen', body: 'Kangasalan keskusta uudistuu ja taajama laajenee vt 12:n molemmin puolin.' }
     ];
@@ -46,10 +48,10 @@
     L.circleMarker(alas, { radius: 14, color: BRAND.navy, weight: 2, fillColor: BRAND.red, fillOpacity: 0.45 })
       .bindTooltip('Alasjärven liittymä', { sticky: true })
       .on('click', () => show(card('Alasjärven liittymä', 'Erittäin ruuhkainen liittymä parannetaan vt 12 -hankkeessa.'))).addTo(g.areas);
-    [[61.4935, 23.9375], [61.4845, 23.9618]].forEach(p => L.circleMarker(p, { radius: 11, color: BRAND.navy, weight: 2, fillColor: BRAND.orange, fillOpacity: 0.45 }).addTo(g.areas));
+    [JL('lamminrahka'), JL('vatiala')].forEach(p => L.circleMarker(p, { radius: 11, color: BRAND.navy, weight: 2, fillColor: BRAND.orange, fillOpacity: 0.45 }).addTo(g.areas));
 
-    const ringNE = [[61.4845, 23.9618], [61.4950, 23.9600], [61.5100, 23.9500], [61.5300, 23.9320], [61.5480, 23.9300]];
-    const ringS = [[61.4744, 23.9814], [61.4660, 23.9720], [61.4580, 23.9580], [61.4520, 23.9300], [61.4480, 23.8900], [61.4450, 23.8600]];
+    const ringNE = [JL('vatiala'), [61.4950, 23.9600], [61.5100, 23.9500], [61.5300, 23.9320], [61.5480, 23.9300]];
+    const ringS = [JL('lentola'), [61.4660, 23.9720], [61.4580, 23.9580], [61.4520, 23.9300], [61.4480, 23.8900], [61.4450, 23.8600]];
     [[ringNE, '2-kehä Lentola–Tarastenjärvi', 'Uusi poikittainen yhteys Lentolasta pohjoiseen. Edellyttää toimivaa vt 12:ta.'],
      [ringS, '2-kehä Rusko–Lentola', 'Yhdistää Ruskon ja Saarenmaan teollisuus- ja asuinalueet vt 12:een Lentolassa.']].forEach(([ll, t, b]) => {
       L.polyline(ll, { color: BRAND.red, weight: 4, dashArray: '2 8', lineCap: 'round' })
@@ -106,18 +108,16 @@
       .addTo(g.bike);
     L.circleMarker([61.4846, 23.9600], { radius: 6, color: '#fff', weight: 2, fillColor: BRAND.cyan, fillOpacity: 1 }).bindTooltip('Pyörätie alittaa vt 12:n').addTo(g.bike);
 
-    // Kirkkojärven Natura-alue
-    const lake = ellipse(61.4560, 24.0420, 1350, 650, -15);
-    L.polygon(ellipse(61.4560, 24.0420, 1600, 850, -15), { color: BRAND.green, weight: 3, dashArray: '4 6', fillColor: BRAND.green, fillOpacity: 0.12 })
+    // Kirkkojärven Natura-alue: järven rantaviiva OSM:stä
+    L.polygon(R.kirkkojarvi, { color: BRAND.green, weight: 3, dashArray: '4 6', fillColor: BRAND.green, fillOpacity: 0.18 })
       .bindTooltip('Kirkkojärven Natura-alue', { sticky: true })
       .on('click', () => show(card('Kirkkojärven Natura-alue', 'Melun ja tien estevaikutuksen vähentäminen huomioidaan suunnittelussa. Pieneläintunnelit ja ulkoilureittien alikulut parantavat yhteyksiä.')))
       .addTo(g.natura);
-    L.polygon(lake, { stroke: false, fillColor: BRAND.cyan, fillOpacity: 0.35, interactive: false }).addTo(g.natura);
 
     // St 339 Kangasalantie: liikenteen vähenemä
-    const st339 = [[61.4880, 23.8350], [61.4840, 23.8700], [61.4800, 23.9000], [61.4770, 23.9300], [61.4740, 23.9600]];
-    L.polyline(st339, { color: BRAND.cyan, weight: 5 }).addTo(g.st339);
-    L.marker([61.4815, 23.8900], { icon: L.divIcon({ className: 'num-badge num-badge--cyan', html: '−8 600', iconSize: null }) })
+    const st339 = new Path(R.st339);
+    L.polyline(R.st339, { color: BRAND.cyan, weight: 5 }).bindTooltip('Kangasalantie (st 339)', { sticky: true }).addTo(g.st339);
+    L.marker(st339.at(st339.length * 0.45).slice(0, 2), { icon: L.divIcon({ className: 'num-badge num-badge--cyan', html: '−8 600', iconSize: null }) })
       .on('click', () => show(card('Kangasalantie (st 339)', 'Liikenteen mallinnettu vähenemä noin 8 600 ajoneuvoa vuorokaudessa, kun liikenne siirtyy nelikaistaiselle vt 12:lle. Taajamaliikenne rauhoittuu.')))
       .addTo(g.st339);
     const vtMid = vt.at(vt.project(61.498, 23.91));
