@@ -36,12 +36,12 @@
 
     const areas = [
       { c: R.places.lamminrahka, rx: 1200, ry: 750, rot: 15, color: BRAND.yellow, title: 'Lamminrahka–Ojala', label: 'Lamminrahka–Ojala · 12 000 as.', body: 'Uusi asuinalue noin 12 000 asukkaalle. Liikenne kytkeytyy vt 12:een Lamminrahkan eritasoliittymän kautta.' },
-      { c: [61.4520, 23.9300], rx: 2000, ry: 1300, rot: -10, color: '#8b5e3c', title: 'Saarenmaan alue', label: 'Saarenmaa · 7 300 as. · 4 000 tp', body: 'Noin 7 300 asukasta ja 4 000 työpaikkaa. Yhteys vt 12:lle Kehä II:n Rusko–Lentola-jatkeen kautta.' },
+      { c: [61.4520, 23.9300], rx: 2000, ry: 1300, rot: -10, color: '#8b5e3c', labelOffset: [0, 34], title: 'Saarenmaan alue', label: 'Saarenmaa · 7 300 as. · 4 000 tp', body: 'Noin 7 300 asukasta ja 4 000 työpaikkaa. Yhteys vt 12:lle Kehä II:n Rusko–Lentola-jatkeen kautta.' },
       { c: [61.4560, 24.0780], rx: 3800, ry: 1700, rot: -28, color: BRAND.green, title: 'Keskustan uudistaminen ja taajaman laajentaminen', label: 'Keskustan uudistaminen', body: 'Kangasalan keskusta uudistuu ja taajama laajenee vt 12:n molemmin puolin.' }
     ];
     areas.forEach(a => {
       L.polygon(ellipse(a.c[0], a.c[1], a.rx, a.ry, a.rot), { color: BRAND.navy, weight: 2, dashArray: '6 5', fillColor: a.color, fillOpacity: 0.35 })
-        .bindTooltip(a.label || a.title, { permanent: true, direction: 'center', className: 'place-label' })
+        .bindTooltip(a.label || a.title, { permanent: true, direction: 'center', offset: a.labelOffset || [0, 0], className: 'place-label' })
         .on('click', () => show(card(a.title, a.body))).addTo(g.areas);
     });
     const alas = [T.junctions[0].lat, T.junctions[0].lng];
@@ -50,19 +50,28 @@
       .on('click', () => show(card('Alasjärven liittymä', 'Erittäin ruuhkainen liittymä parannetaan vt 12 -hankkeessa.'))).addTo(g.areas);
     [JL('lamminrahka'), JL('vatiala')].forEach(p => L.circleMarker(p, { radius: 11, color: BRAND.navy, weight: 2, fillColor: BRAND.orange, fillOpacity: 0.45 }).addTo(g.areas));
 
-    const ringNE = [JL('vatiala'), [61.4950, 23.9600], [61.5100, 23.9500], [61.5300, 23.9320], [61.5480, 23.9300]];
-    const ringS = [JL('lentola'), [61.4660, 23.9720], [61.4580, 23.9580], [61.4520, 23.9300], [61.4480, 23.8900], [61.4450, 23.8600]];
-    [[ringNE, '2-kehä Lentola–Tarastenjärvi', 'Uusi poikittainen yhteys Lentolasta pohjoiseen. Edellyttää toimivaa vt 12:ta.'],
-     [ringS, '2-kehä Rusko–Lentola', 'Yhdistää Ruskon ja Saarenmaan teollisuus- ja asuinalueet vt 12:een Lentolassa.']].forEach(([ll, t, b]) => {
-      L.polyline(ll, { color: BRAND.red, weight: 4, dashArray: '2 8', lineCap: 'round' })
-        .bindTooltip(t, { sticky: true }).on('click', () => show(card(t, b))).addTo(g.ring);
+    // 2-kehä (tuleva): Saarenmaa.png ja laajempi_kokonaisuus.png (data/roads.js → ring)
+    const ringStyle = { color: BRAND.red, weight: 4, dashArray: '2 8', lineCap: 'round' };
+    [[[R.ring.north], '2-kehä Lentola–Tarastenjärvi (tuleva)', 'Uusi poikittainen yhteys Vatialan eritasoliittymästä pohjoiseen Lamminrahka–Ojalan itäpuolelta Tarastenjärvelle. Edellyttää toimivaa vt 12:ta.'],
+     [[R.ring.south, R.ring.southBranch], '2-kehä Rusko–Lentola (tuleva)', 'Uudet yhteydet Lentolan eritasoliittymästä Saarenmaan alueen läpi Ruskon suuntaan. Yhdistää Ruskon ja Saarenmaan teollisuus- ja asuinalueet vt 12:een.']].forEach(([lines, t, b]) => {
+      lines.forEach(ll => L.polyline(ll, ringStyle).bindTooltip(t, { sticky: true }).on('click', () => show(card(t, b))).addTo(g.ring));
     });
 
-    const tram1 = [[61.4978, 23.7610], [61.5000, 23.7900], [61.5040, 23.8200], [61.5030, 23.8450], [61.5050, 23.8700], [61.5080, 23.9000]];
-    const tram2 = [[61.4500, 23.8500], [61.4520, 23.8800], [61.4530, 23.9100]];
-    [tram1, tram2].forEach(ll => L.polyline(ll, { color: BRAND.navy, weight: 4, dashArray: '2 7', lineCap: 'round' })
-      .bindTooltip('Raitiotie (suunniteltu jatke)', { sticky: true })
-      .on('click', () => show(card('Raitiotie', 'Raitiotien jatkeet Lamminrahkaan ja Saarenmaahan tukevat kasvua etelään ja itään.'))).addTo(g.tram));
+    // Raitiotie: raitiotie.png (data/roads.js → tram)
+    const TRAM = '#1f5fd6';
+    L.polyline(R.tram.linnainmaa, { color: TRAM, weight: 5, opacity: 0.9, lineCap: 'round' })
+      .bindTooltip('Raitiotien jatke Kauppi–Linnainmaa–Kangasalan asema (suunniteltu)', { sticky: true })
+      .on('click', () => show(card('Raitiotien jatke Linnainmaalle ja Kangasalan asemalle', 'Suunniteltu jatke Kaupista Heikkilänkadun varikon ja Linnainmaan kautta Atalaan, Rissoon ja Kangasalan asemalle. Tukee Lamminrahka–Ojalan kasvua.'))).addTo(g.tram);
+    const tramEnd = R.tram.linnainmaa[R.tram.linnainmaa.length - 1];
+    L.circleMarker(tramEnd, { radius: 6, color: '#fff', weight: 2, fillColor: TRAM, fillOpacity: 1 })
+      .bindTooltip('Kangasalan asema', { direction: 'right', offset: [6, 0] }).addTo(g.tram);
+    const hs = R.tram.saarenmaa;
+    L.polyline(hs, { color: TRAM, weight: 4, dashArray: '8 7', lineCap: 'round', opacity: 0.85 })
+      .bindTooltip('Yhteystarve Hervannasta Saarenmaalle', { sticky: true })
+      .on('click', () => show(card('Yhteystarve Hervannasta Saarenmaalle', 'Joukkoliikenneyhteys Hervannan varikolta Saarenmaan kasvavalle alueelle. Linjausta ei ole vielä suunniteltu.'))).addTo(g.tram);
+    const [a1, a2] = hs.slice(-2);
+    const brg = Math.atan2((a2[1] - a1[1]) * Math.cos(a2[0] * Math.PI / 180), a2[0] - a1[0]) * 180 / Math.PI;
+    L.marker(a2, { interactive: false, icon: L.divIcon({ className: 'map-arrow', html: `<span style="transform:rotate(${brg.toFixed(0)}deg)">▲</span>`, iconSize: [18, 18], iconAnchor: [9, 9] }) }).addTo(g.tram);
 
     layerToggles(root, map, g);
     map.fitBounds(L.latLngBounds([[61.545, 23.78], [61.435, 24.13]]), { padding: [5, 5] });
@@ -75,10 +84,11 @@
     const vt = vt12Path();
     const panel = root.querySelector('.map-info');
     const show = html => { panel.innerHTML = html; };
-    const g = { noise: L.layerGroup(), bike: L.layerGroup(), natura: L.layerGroup(), st339: L.layerGroup(), under: L.layerGroup() };
+    const g = { noise: L.layerGroup(), bike: L.layerGroup(), natura: L.layerGroup(), st339: L.layerGroup() };
     projectLine(map, vt);
 
-    // Melusuojaustarve: tien sivuilla, likimääräiset kohdat asutuksen kohdalla.
+    // Melusuojaustarve: SUUNTAA ANTAVA. Lähdekuva (melusuojaus.png) kattaa vain Herttualan kohdan; muut osuudet on
+    // sijoitettu asutuksen kohdalle. Tarkentuu tiesuunnitelmassa.
     const sideLine = (s0, s1, side) => {
       const out = [];
       for (let s = s0; s <= s1; s += 60) {
@@ -96,22 +106,31 @@
     noiseStretches.forEach(([a, b, side, name]) => {
       L.polyline(sideLine(a, b, side), { color: BRAND.orange, weight: 5, opacity: 0.9, lineCap: 'round' })
         .bindTooltip('Melusuojaustarve: ' + name, { sticky: true })
-        .on('click', () => show(card('Meluntorjunta – ' + name, 'Melusuojaukselle on tarvetta pitkin hankealuetta. Uudet melukaiteet ja -vallit suojaavat asutusta.')))
+        .on('click', () => show(card('Meluntorjunta – ' + name, 'Melusuojaukselle on tarvetta pitkin hankealuetta. Kartan osuudet ovat suuntaa antavia; meluesteiden sijainnit ja tyypit tarkentuvat tiesuunnitelmassa.')))
         .addTo(g.noise);
     });
 
-    // Pääpyörätie Suorama–Liuttu
-    const bike = [[61.4868, 23.9300], [61.4855, 23.9450], [61.4846, 23.9600], [61.4830, 23.9750], [61.4812, 23.9900]];
-    L.polyline(bike, { color: BRAND.cyan, weight: 5, lineCap: 'round' })
+    // Pääpyörätie Suorama–Liuttu: Kangasalantien (st 339) varressa (data/roads.js → bike). Piirretty hieman
+    // tien pohjoispuolelle, jotta st 339 -viiva näkyy rinnalla.
+    const bikePath = new Path(R.bike);
+    const bikeLL = [];
+    for (let s = 0; s <= bikePath.length; s += 40) {
+      const p = bikePath.at(s);
+      bikeLL.push(offsetLL(p[0], p[1], 90 - p[2] * 180 / Math.PI - 90, 45));
+    }
+    L.polyline(bikeLL, { color: BRAND.navy, weight: 5, lineCap: 'round', dashArray: '10 6' })
       .bindTooltip('Seudullinen pääpyörätie, 1. vaihe Suorama–Liuttu', { sticky: true })
-      .on('click', () => show(card('Seudullinen pääpyörätie', 'Kangasalan pääpyörätien 1. vaihe Suorama–Liuttu kulkee vt 12:n poikki. Hanke parantaa jalankulun ja pyöräilyn yhteyksiä.')))
+      .on('click', () => show(card('Seudullinen pääpyörätie, 1. vaihe Suorama–Liuttu', 'Kulkee pääosin Kangasalantien (vanha Tampere–Kangasala-tie) ja Kaukajärven pohjoisrannan tuntumassa ja yhdistää Kangasalan ja Tampereen seudullisen pyöräilyn pääreitin. Ylittää vt 12:n Lentolassa.')))
       .addTo(g.bike);
-    L.circleMarker([61.4846, 23.9600], { radius: 6, color: '#fff', weight: 2, fillColor: BRAND.cyan, fillOpacity: 1 }).bindTooltip('Pyörätie alittaa vt 12:n').addTo(g.bike);
+    L.circleMarker(JL('lentola'), { radius: 6, color: '#fff', weight: 2, fillColor: BRAND.navy, fillOpacity: 1 }).bindTooltip('Pääpyörätie ylittää vt 12:n (Lentola)').addTo(g.bike);
+    [[R.bike[0], 'Liuttu', 'top'], [R.bike[R.bike.length - 1], 'Suorama', 'right']].forEach(([p, t, d]) =>
+      L.circleMarker(p, { radius: 4, color: '#fff', weight: 2, fillColor: BRAND.navy, fillOpacity: 1 })
+        .bindTooltip(t, { permanent: true, direction: d, offset: d === 'top' ? [0, -6] : [6, 0], className: 'place-label' }).addTo(g.bike));
 
     // Kirkkojärven Natura-alue: järven rantaviiva OSM:stä
     L.polygon(R.kirkkojarvi, { color: BRAND.green, weight: 3, dashArray: '4 6', fillColor: BRAND.green, fillOpacity: 0.18 })
       .bindTooltip('Kirkkojärven Natura-alue', { sticky: true })
-      .on('click', () => show(card('Kirkkojärven Natura-alue', 'Melun ja tien estevaikutuksen vähentäminen huomioidaan suunnittelussa. Pieneläintunnelit ja ulkoilureittien alikulut parantavat yhteyksiä.')))
+      .on('click', () => show(card('Kirkkojärven Natura-alue', 'Melun ja tien estevaikutuksen vähentäminen huomioidaan suunnittelussa. Hankkeeseen sisältyy ulkoilureittien alikulkuja ja pieneläintunneleita; niiden sijainnit tarkentuvat tiesuunnitelmassa. Rajaus: järven rantaviiva (OSM), ei virallinen Natura-raja.')))
       .addTo(g.natura);
 
     // St 339 Kangasalantie: liikenteen vähenemä
@@ -123,12 +142,6 @@
     const vtMid = vt.at(vt.project(61.498, 23.91));
     L.marker([vtMid[0] + 0.004, vtMid[1]], { icon: L.divIcon({ className: 'num-badge num-badge--orange', html: '+8 600', iconSize: null }) })
       .bindTooltip('Vt 12: liikenne siirtyy pääväylälle').addTo(g.st339);
-
-    // Alikulut ja pieneläintunnelit
-    [[3200, 'Ulkoilureitin alikulku'], [5600, 'Pieneläintunneli'], [10400, 'Ulkoilureitin alikulku'], [12000, 'Pieneläintunneli'], [13200, 'Pieneläintunneli']].forEach(([s, t]) => {
-      const p = vt.at(s);
-      L.circleMarker([p[0], p[1]], { radius: 6, color: '#fff', weight: 2, fillColor: BRAND.green, fillOpacity: 1 }).bindTooltip(t).addTo(g.under);
-    });
 
     layerToggles(root, map, g);
     map.fitBounds(L.latLngBounds([[61.507, 23.83], [61.442, 24.11]]), { padding: [5, 5] });

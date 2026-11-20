@@ -9,6 +9,17 @@
       updated: 'Marraskuu 2026'
     },
 
+    // Kumppanit: logot sivun alussa ja PowerPointin kansidiassa. ar = rajatun logon leveys/korkeus,
+    // jonka avulla logot skaalataan visuaalisesti samankokoisiksi (sama pinta-ala).
+    partners: [
+      { name: 'Kangasalan kaupunki', url: 'https://www.kangasala.fi/vt-12-alasjarvi-huutijarvi/', logo: 'assets/logos/partners/kangasala.png', ar: 4.68 },
+      { name: 'Tampereen kaupunki', url: 'https://www.tampere.fi/', logo: 'assets/logos/partners/tampere.png', ar: 4.32 },
+      { name: 'Pälkäneen kunta', url: 'https://www.palkane.fi/', logo: 'assets/logos/partners/palkane.png', ar: 1.33 },
+      { name: 'Pirkanmaan liitto', url: 'https://www.pirkanmaa.fi/', logo: 'assets/logos/partners/pirkanmaa.png', ar: 5.41 },
+      { name: 'Tampereen kauppakamari', url: 'https://tampereenkauppakamari.fi/', logo: 'assets/logos/partners/tampereen-kauppakamari.png', ar: 4.03 },
+      { name: 'Business Kangasala', url: 'https://www.businesskangasala.fi/', logo: 'assets/logos/partners/business-kangasala.png', ar: 2.63 }
+    ],
+
     hero: {
       kicker: 'Vt 12 Alasjärvi–Huutijärvi',
       title: 'Suomen kannattavin yhteysvälihanke',
@@ -73,8 +84,8 @@
 
     simulation: {
       title: 'Liikenne 2026–2050 kartalla',
-      lead: 'Simulaatio näyttää, miten liikenne kasvaa nykytilasta vuoden 2050 ennusteeseen. Valitse vuosi, jolloin tie on nelikaistainen, ja vertaa sujuvuutta kaksikaistaiseen tiehen.',
-      note: 'Liikennemäärät: Vt 12 Alasjärvi–Huutijärvi tiesuunnitelma, nykytila ja ennuste 2050. Välivuodet on laskettu tasaisella kasvulla. 1+1-tien kapasiteetti 9 000 ajon./vrk (Väyläviraston ohjeita 16/2021). 2+2-tien kapasiteetiksi on oletettu havainnollistamista varten 45 000 ajon./vrk. Autojen määrä kartalla on suuntaa antava.'
+      lead: 'Simulaatio näyttää, miten liikenne kasvaa nykytilasta vuoden 2050 ennusteeseen. Valitse vuosi, jolloin tie on nelikaistainen, ja vertaa kuormitusta kaksikaistaiseen tiehen.',
+      note: 'Liikennemäärät: Vt 12 Alasjärvi–Huutijärvi tiesuunnitelma, nykytila ja ennuste 2050. Välivuodet on laskettu tasaisella kasvulla. 1+1-tien kapasiteetti 9 000 ajon./vrk (Väyläviraston ohjeita 16/2021). 2+2-tien kapasiteetiksi on oletettu havainnollistamista varten 45 000 ajon./vrk. Kuormitusaste = osuuden KVL / kapasiteetti. Palvelutaso A–F on johdettu kuormitusasteesta suuntaa antavasti (Traficomin sujuvuustilastossa osuus on luokissa E–F). Autojen määrä, nopeus ja jonoutuminen kartalla ovat havainnollistusta.'
     },
 
     bottleneck: {
@@ -137,8 +148,8 @@
     environment: {
       title: 'Melusuojausta, pyöräväyliä ja taajamaliikenteen rauhoittamista',
       bullets: [
-        'Ulkoilureittien alikulkuja ja pieneläintunneleita',
-        'Kangasalan seudullinen pääpyörätie (1. vaihe Suorama–Liuttu) kulkee vt 12:n poikki',
+        'Ulkoilureittien alikulkuja ja pieneläintunneleita (sijainnit tarkentuvat tiesuunnitelmassa)',
+        'Kangasalan seudullinen pääpyörätie (1. vaihe Suorama–Liuttu) kulkee Kangasalantien ja Kaukajärven pohjoisrannan tuntumassa ja ylittää vt 12:n',
         'Kirkkojärven Natura-alueen huomiointi: melun ja tien estevaikutuksen vähentäminen',
         'Liikenteen mallinnettu vähenemä Kangasalantiellä (st 339): tuhansia ajoneuvoja vuorokaudessa',
         'Melusuojaukselle on tarvetta pitkin hankealuetta'
@@ -161,6 +172,7 @@
     },
 
     share: {
+      url: 'https://www.kangasala.fi/vt-12-alasjarvi-huutijarvi/',
       label: 'Jaa artikkeli',
       text: 'Vt 12 Alasjärvi–Huutijärvi – Suomen kannattavin yhteysvälihanke (H/K 2,85)'
     }

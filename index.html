@@ -8,7 +8,7 @@
   <meta property="og:type" content="article">
   <meta property="og:title" content="Vt 12 Alasjärvi–Huutijärvi – Suomen kannattavin yhteysvälihanke">
   <meta property="og:description" content="Maan vilkkain kaksikaistainen pääväylä parannetaan nelikaistaiseksi. H/K 2,85, toteutusvalmius 2027.">
-  <meta property="og:url" content="https://kangasalakehitys.github.io/vt12/">
+  <meta property="og:url" content="https://www.kangasala.fi/vt-12-alasjarvi-huutijarvi/">
   <meta property="og:image" content="https://kangasalakehitys.github.io/vt12/downloads/img/sim_2050_1plus1.png">
   <meta property="og:locale" content="fi_FI">
   <meta name="twitter:card" content="summary_large_image">
@@ -20,7 +20,7 @@
 
   <header class="topbar">
     <div class="wrap topbar__in">
-      <a href="#" class="topbar__logo" aria-label="Kangasalan kaupunki"><img src="assets/logos/Kangasala_logo_RGB_color.svg" alt="Kangasala"></a>
+      <a href="https://www.kangasala.fi/vt-12-alasjarvi-huutijarvi/" class="topbar__logo" aria-label="Kangasalan kaupunki: Vt 12 Alasjärvi–Huutijärvi"><img src="assets/logos/Kangasala_logo_RGB_color.svg" alt="Kangasala"></a>
       <button class="nav-toggle" aria-expanded="false" aria-controls="nav">Valikko</button>
       <nav id="nav" class="nav">
         <a href="#hanke">Hanke</a>
@@ -34,6 +34,10 @@
       </nav>
     </div>
   </header>
+
+  <nav class="partners" aria-label="Kumppanit">
+    <ul class="wrap partners__list" data-render="partners"></ul>
+  </nav>
 
   <main id="sisalto">
     <!-- 1. Hero -->
@@ -153,11 +157,11 @@
             </div>
             <dl class="kpis">
               <div><dt>Vilkkain osuus</dt><dd><span data-sim="maxkvl">–</span> <small>ajon./vrk</small></dd></div>
-              <div><dt>Kuormitus vilkkaimmalla</dt><dd data-sim="load">–</dd></div>
+              <div><dt>Kuormitusaste vilkkaimmalla <small>(KVL / kapasiteetti)</small></dt><dd data-sim="load">–</dd></div>
               <div><dt>Raskas liikenne enint.</dt><dd><span data-sim="ras">–</span> <small>ajon./vrk</small></dd></div>
-              <div><dt>Sujuvuus (nopeus)</dt><dd data-sim="flow">–</dd></div>
+              <div><dt>Palvelutaso <small>(HCM, suuntaa antava)</small></dt><dd data-sim="flow">–</dd></div>
             </dl>
-            <p class="hint">Pysäytä simulaatio, niin liittymien ja tieosuuksien liikennemäärät näkyvät kartalla. Klikkaa liittymää nähdäksesi muutoksen.</p>
+            <p class="hint">Pysäytä simulaatio, niin liittymien ja tieosuuksien liikennemäärät näkyvät kartalla. Klikkaa liittymää nähdäksesi muutoksen. Autojen hidastuminen ja jonoutuminen kartalla on havainnollistus, ei mallinnettu tulos.</p>
             <button class="link" data-sim="reset">Palauta karttanäkymä</button>
           </div>
         </div>
@@ -218,7 +222,7 @@
             <fieldset class="toggles"><legend>Näytä kartalla</legend>
               <label class="check"><input type="checkbox" data-maplayer="areas" checked> Kasvualueet</label>
               <label class="check"><input type="checkbox" data-maplayer="ring" checked> 2-kehä (tuleva)</label>
-              <label class="check"><input type="checkbox" data-maplayer="tram" checked> Raitiotie</label>
+              <label class="check"><input type="checkbox" data-maplayer="tram" checked> Raitiotie ja yhteystarve</label>
             </fieldset>
             <div class="map-info"><div class="map-card"><h4>Klikkaa kohdetta</h4><p>Valitse kartalta alue tai yhteys nähdäksesi lisätietoa.</p></div></div>
           </aside>
@@ -275,13 +279,12 @@
           <div class="map-box" aria-label="Koontikartta: melusuojaus, pyörätie, Natura-alue ja Kangasalantie"></div>
           <aside class="mapblock__side">
             <fieldset class="toggles"><legend>Näytä kartalla</legend>
-              <label class="check"><input type="checkbox" data-maplayer="noise" checked> <i class="bar bar--orange"></i> Melusuojaustarve</label>
-              <label class="check"><input type="checkbox" data-maplayer="bike" checked> <i class="bar bar--cyan"></i> Pääpyörätie Suorama–Liuttu</label>
+              <label class="check"><input type="checkbox" data-maplayer="noise" checked> <i class="bar bar--orange"></i> Melusuojaustarve (suuntaa antava)</label>
+              <label class="check"><input type="checkbox" data-maplayer="bike" checked> <i class="bar bar--bike"></i> Pääpyörätie Suorama–Liuttu</label>
               <label class="check"><input type="checkbox" data-maplayer="natura" checked> <i class="bar bar--green"></i> Kirkkojärven Natura-alue</label>
               <label class="check"><input type="checkbox" data-maplayer="st339" checked> <i class="bar bar--cyan"></i> Kangasalantie (st 339)</label>
-              <label class="check"><input type="checkbox" data-maplayer="under" checked> <i class="dot dot--food"></i> Alikulut ja pieneläintunnelit</label>
             </fieldset>
-            <div class="map-info"><div class="map-card"><h4>Koontikartta</h4><p>Kohteet on esitetty karkeasti. Klikkaa kohdetta nähdäksesi lisätietoa.</p></div></div>
+            <div class="map-info"><div class="map-card"><h4>Koontikartta</h4><p>Kohteet on esitetty karkeasti. Melusuojausosuudet ovat suuntaa antavia. Ulkoilureittien alikulkujen ja pieneläintunnelien sijainnit tarkentuvat tiesuunnitelmassa. Klikkaa kohdetta nähdäksesi lisätietoa.</p></div></div>
           </aside>
         </div>
       </div>

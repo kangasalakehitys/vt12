@@ -41,6 +41,20 @@ a { color: var(--navy); }
   .nav a:hover { color: var(--red-text); }
 }
 
+/* Kumppanilogot: valkoinen nauha heti yläpalkin alla. Logon korkeus = perus / √(kuvasuhde),
+   jolloin leveät ja korkeat logot saavat saman pinta-alan. */
+.partners { background: #fff; border-bottom: 1px solid var(--line); }
+.partners__list { list-style: none; margin: 0 auto; max-width: 1400px; padding-top: 14px; padding-bottom: 14px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px 12px; align-items: center; justify-items: center; --base: 62px; }
+.partners__list li { height: 44px; min-width: 0; width: 100%; display: flex; align-items: center; justify-content: center; }
+.partners__list a { display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; padding: 4px; border-radius: var(--radius); }
+.partners__list img { height: min(100%, calc(var(--base) * var(--s, .5))); width: auto; max-width: 100%; object-fit: contain; transition: transform .15s; }
+.partners__list a:hover img, .partners__list a:focus-visible img { transform: scale(1.06); }
+@media (min-width: 960px) {
+  .partners__list { grid-template-columns: repeat(6, 1fr); gap: 24px; --base: 84px; }
+  .partners__list li { height: 56px; }
+}
+
 /* Hero */
 .hero { background: var(--red); color: #fff; padding: 72px 0 56px; }
 .hero__kicker { text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin: 0 0 12px; }
@@ -275,6 +289,7 @@ input[type=range] { width: 100%; accent-color: var(--red); height: 28px; }
 
 /* Tulostus / PDF (A4) */
 @media print {
+  .partners { border: 0; }
   @page { size: A4; margin: 14mm 14mm 16mm; }
   body { font-size: 10.5pt; }
   .topbar, .skip, #materiaalit, .sim__panel, .mapblock__side, .leaflet-control-container, .nav-toggle { display: none !important; }
@@ -300,3 +315,7 @@ input[type=range] { width: 100%; accent-color: var(--red); height: 28px; }
   .footer { background: none; color: #444; }
   .footer__logo { display: none; }
 }
+.kpis dd[data-sim=flow] { font-size: 1rem; line-height: 1.3; }
+
+.bar--bike { background: repeating-linear-gradient(90deg, var(--navy) 0 7px, transparent 7px 11px); }
+.map-arrow span { display: block; color: #1f5fd6; font-size: 18px; line-height: 18px; text-align: center; text-shadow: 0 0 2px #fff; }

@@ -100,9 +100,10 @@
     const from = key => ({ osm: key });
     const to = key => ({ osm: key, a: 'end', b: 'start' });
     const VT = { vt: [null, null] };   // vt 12 edellisen ja seuraavan osan välillä
-    // Kehä II:n tulevat jatkeet (ei vielä tieverkossa, piirretty karkeasti).
-    const ke2East = [[61.4900, 23.9620], [61.5100, 23.9500], [61.5300, 23.9300]];
-    const ke2South = [[61.4580, 23.9580], [61.4660, 23.9750]];
+    // Kehä II:n tulevat jatkeet (ei vielä tieverkossa): data/roads.js → ring (Saarenmaa.png, laajempi_kokonaisuus.png).
+    // Saarenmaan liikenne tulee alueen keskeltä eteläistä linjausta pitkin Lentolan eritasoliittymään.
+    const ke2South = R.ring.south.slice(0, 10).reverse();       // Saarenmaa → Lentolan etl
+    const ke2North = R.ring.north.slice(1);                      // Vatialan etl → Tarastenjärvi
 
     const defs = [
       // Teollisuuden rekat
@@ -116,7 +117,7 @@
       ...both({ layer: 'future', color: BRAND.orange, rate: 0.5, truck: true, from: 2032,
         parts: [P.saarenmaa, ...ke2South, P.lentola] }),
       ...both({ layer: 'future', color: BRAND.orange, rate: 0.4, truck: true, from: 2035,
-        parts: [from('lentola_vt12'), { vt: [null, J[3]] }, ...ke2East, P.tarastenjarvi] }),
+        parts: [from('lentola_vt12'), { vt: [null, J[3]] }, ...ke2North] }),
       // Ruokakuljetukset Sahalahdelta: Sahalahdentie → Huutijärven etl → vt 12
       { layer: 'food', color: BRAND.green, rate: 0.7, truck: true,
         parts: [from('sahalahti_vt12'), VT, to('tarastenjarvi_vt12')] },
@@ -154,10 +155,9 @@
       L.polyline(r.path.latlngs, { color: r.color, weight: dashed ? 3 : 2.5, opacity: 0.5, dashArray: dashed ? '6 6' : null, interactive: false }).addTo(groups[r.layer]);
     });
     // Kehä II tulevat jatkeet
-    L.polyline([P.lentola, ...ke2South.slice().reverse(), P.saarenmaa, P.rusko], { color: BRAND.red, weight: 3, dashArray: '2 7', lineCap: 'round' })
-      .bindTooltip('Kehä II Rusko–Lentola (tuleva)').addTo(groups.future);
-    L.polyline([vt.at(J[3]).slice(0, 2), ...ke2East, P.tarastenjarvi], { color: BRAND.red, weight: 3, dashArray: '2 7', lineCap: 'round' })
-      .bindTooltip('Kehä II Lentola–Tarastenjärvi (tuleva)').addTo(groups.future);
+    const ke2Style = { color: BRAND.red, weight: 3, dashArray: '2 7', lineCap: 'round' };
+    [R.ring.south, R.ring.southBranch].forEach(ll => L.polyline(ll, ke2Style).bindTooltip('Kehä II Rusko–Lentola (tuleva)').addTo(groups.future));
+    L.polyline(R.ring.north, ke2Style).bindTooltip('Kehä II Lentola–Tarastenjärvi (tuleva)').addTo(groups.future);
     // Satamasuunnat
     [[P.west, 'Rauma · Pori · satamat', 'left'], [P.east, 'Lahti · Kouvola · HaminaKotka', 'right']].forEach(([at, txt, dir]) => {
       L.marker(at, { icon: L.divIcon({ className: 'edge-arrow edge-arrow--' + dir, html: `<span>${txt}</span>`, iconSize: null }) }).addTo(groups.port);
@@ -181,6 +181,7 @@
       const kvl = segs.reduce((a, s) => a + lerp(s.now[0], s.f2050[0], t01()), 0) / segs.length;
       return kvl / (state.four ? T.capacity22 : T.capacity11);
     };
+    // Hidastuskerroin on animaation havainnollistus, ei mallinnettu nopeus.
     const vtF = () => {
       const l = vtLoad();
       return l <= 0.85 ? 1 : Math.max(0.12, 1 / (1 + 2.2 * Math.pow(l - 0.85, 1.3)));
@@ -253,12 +254,12 @@
     function refresh() {
       ui.year.textContent = Math.floor(state.year);
       ui.slider.value = state.year;
-      const f = vtF();
+      const load = vtLoad();
       projLine.setStyle({ color: state.four ? BRAND.green : BRAND.red, weight: state.four ? 9 : 5 });
       ui.status.className = 'sim-status ' + (state.four ? 'is-good' : 'is-bad');
       ui.status.textContent = state.four
         ? 'Vt 12 nelikaistainen – kuljetukset kulkevat sujuvasti'
-        : `Vt 12 kaksikaistainen – ruuhka hidastaa kuljetuksia (nopeus noin ${Math.round(f * 100)} % sujuvasta)`;
+        : `Vt 12 kaksikaistainen – ruuhka hidastaa kuljetuksia (liikenne keskimäärin ${Math.round(load * 100)} % tien kapasiteetista)`;
     }
     function setPlaying(p) {
       state.playing = p;

@@ -52,8 +52,10 @@
     businessBullets: () => li(C.business.bullets),
     envBullets: () => li(C.environment.bullets),
     defenceBullets: () => li(C.defence.bullets),
+    partners: () => C.partners.map(p =>
+      `<li style="--s:${(1 / Math.sqrt(p.ar)).toFixed(3)}"><a href="${p.url}" target="_blank" rel="noopener" title="${esc(p.name)} (avautuu uuteen ikkunaan)"><img src="${p.logo}" alt="${esc(p.name)}" loading="eager"></a></li>`).join(''),
     share: () => {
-      const url = location.href.split('#')[0];
+      const url = C.share.url || location.href.split('#')[0];
       const u = encodeURIComponent(url), t = encodeURIComponent(C.share.text);
       const links = [
         ['LinkedIn', `https://www.linkedin.com/sharing/share-offsite/?url=${u}`],
@@ -73,7 +75,7 @@
     document.addEventListener('click', e => {
       const b = e.target.closest('[data-share]');
       if (!b) return;
-      const url = location.href.split('#')[0];
+      const url = C.share.url || location.href.split('#')[0];
       if (b.dataset.share === 'native') {
         navigator.share({ title: document.title, text: C.share.text, url }).catch(() => {});
       } else {

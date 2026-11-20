@@ -17,6 +17,16 @@
     if (load <= 0.85) return 1;
     return Math.max(0.1, 1 / (1 + 2.2 * Math.pow(load - 0.85, 1.3)));
   }
+  // Palvelutaso (HCM A–F) johdettuna kuormitusasteesta (KVL / kapasiteetti). Suuntaa antava luokittelu;
+  // Traficomin sujuvuustilastossa vt 12 on luokissa E–F.
+  function los(load) {
+    if (load <= 0.35) return ['A', 'vapaa'];
+    if (load <= 0.55) return ['B', 'sujuva'];
+    if (load <= 0.75) return ['C', 'tyydyttävä'];
+    if (load <= 0.90) return ['D', 'kohtalainen'];
+    if (load <= 1.00) return ['E', 'kapasiteetin rajalla'];
+    return ['F', 'ylikuormittunut'];
+  }
   function loadColor(load, four) {
     if (four) return load < 0.85 ? BRAND.green : BRAND.yellow;
     if (load < 0.85) return BRAND.green;
@@ -373,13 +383,12 @@
       jMarkers.forEach(m => m.setRadius(showNums ? 9 : 7));
 
       const main = targets.slice(1, 8);
-      const lens = S.slice(1, 8).map(x => x.len);
       const maxT = main.reduce((a, b) => b.kvl > a.kvl ? b : a);
-      const avgF = main.reduce((a, b, i) => a + b.f * lens[i], 0) / lens.reduce((a, b) => a + b, 0);
       ui.maxKvl.textContent = fmt(maxT.kvl);
       ui.load.textContent = Math.round(maxT.load * 100) + ' %';
       ui.ras.textContent = fmt(Math.max(...main.map(t => t.ras)));
-      ui.flow.textContent = Math.round(avgF * 100) + ' %';
+      const [losClass, losText] = los(maxT.load);
+      ui.flow.textContent = losClass + ' – ' + losText;
       const loadBad = maxT.load > 1;
       ui.status.className = 'sim-status ' + (four ? 'is-good' : (loadBad ? 'is-bad' : 'is-ok'));
       ui.status.textContent = four
