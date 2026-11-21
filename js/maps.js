@@ -57,18 +57,22 @@
       lines.forEach(ll => L.polyline(ll, ringStyle).bindTooltip(t, { sticky: true }).on('click', () => show(card(t, b))).addTo(g.ring));
     });
 
-    // Raitiotie: raitiotie.png (data/roads.js → tram)
-    const TRAM = '#1f5fd6';
-    L.polyline(R.tram.linnainmaa, { color: TRAM, weight: 5, opacity: 0.9, lineCap: 'round' })
-      .bindTooltip('Raitiotien jatke Kauppi–Linnainmaa–Kangasalan asema (suunniteltu)', { sticky: true })
-      .on('click', () => show(card('Raitiotien jatke Linnainmaalle ja Kangasalan asemalle', 'Suunniteltu jatke Kaupista Heikkilänkadun varikon ja Linnainmaan kautta Atalaan, Rissoon ja Kangasalan asemalle. Tukee Lamminrahka–Ojalan kasvua.'))).addTo(g.tram);
+    // Raitiotie: raitiotie.png (data/roads.js → tram), rautatiekuvio musta-valkoisena katkoviivana
+    const TRAM = '#000';
+    const tramInfo = () => show(card('Raitiotien jatke Linnainmaalle ja Kangasalan asemalle', 'Suunniteltu jatke TAYSilta Teiskontien vartta Alasjärven ja Linnainmaan kautta Lamminrahkaan ja Kangasalan asemalle. Tukee Lamminrahka–Ojalan kasvua.'));
+    L.polyline(R.tram.linnainmaa, { color: TRAM, weight: 7, opacity: 0.95, lineCap: 'butt' })
+      .bindTooltip('Raitiotien jatke TAYS–Linnainmaa–Kangasalan asema (suunniteltu)', { sticky: true })
+      .on('click', tramInfo).addTo(g.tram);
+    L.polyline(R.tram.linnainmaa, { color: '#fff', weight: 3, dashArray: '10 10', lineCap: 'butt', interactive: false }).addTo(g.tram);
     const tramEnd = R.tram.linnainmaa[R.tram.linnainmaa.length - 1];
     L.circleMarker(tramEnd, { radius: 6, color: '#fff', weight: 2, fillColor: TRAM, fillOpacity: 1 })
       .bindTooltip('Kangasalan asema', { direction: 'right', offset: [6, 0] }).addTo(g.tram);
     const hs = R.tram.saarenmaa;
-    L.polyline(hs, { color: TRAM, weight: 4, dashArray: '8 7', lineCap: 'round', opacity: 0.85 })
+    L.polyline(hs, { color: TRAM, weight: 4, dashArray: '8 7', lineCap: 'butt', opacity: 0.85 })
       .bindTooltip('Yhteystarve Hervannasta Saarenmaalle', { sticky: true })
-      .on('click', () => show(card('Yhteystarve Hervannasta Saarenmaalle', 'Joukkoliikenneyhteys Hervannan varikolta Saarenmaan kasvavalle alueelle. Linjausta ei ole vielä suunniteltu.'))).addTo(g.tram);
+      .on('click', () => show(card('Yhteystarve Hervannasta Saarenmaalle', 'Joukkoliikenneyhteys Kauhakorvenkadun raitiovaunuvarikolta Hervannasta Saarenmaan kasvavalle alueelle. Linjausta ei ole vielä suunniteltu.'))).addTo(g.tram);
+    L.circleMarker(hs[0], { radius: 5, color: '#fff', weight: 2, fillColor: TRAM, fillOpacity: 1 })
+      .bindTooltip('Hervannan raitiovaunuvarikko', { direction: 'left', offset: [-6, 0] }).addTo(g.tram);
     const [a1, a2] = hs.slice(-2);
     const brg = Math.atan2((a2[1] - a1[1]) * Math.cos(a2[0] * Math.PI / 180), a2[0] - a1[0]) * 180 / Math.PI;
     L.marker(a2, { interactive: false, icon: L.divIcon({ className: 'map-arrow', html: `<span style="transform:rotate(${brg.toFixed(0)}deg)">▲</span>`, iconSize: [18, 18], iconAnchor: [9, 9] }) }).addTo(g.tram);

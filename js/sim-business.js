@@ -16,6 +16,13 @@
   }, R.places);
   const EAST = R.routes.vt12_east;
   P.east = EAST[Math.round(EAST.length * 0.6)];
+  // Läpikulkusuunnat (reittien päät karttanäkymän reunoilla)
+  const lastOf = k => R.routes[k][R.routes[k].length - 1];
+  const along = (k, f) => R.routes[k][Math.round((R.routes[k].length - 1) * f)];
+  P.helsinki = along('vt3_helsinki', 0.55);
+  P.nokia = R.routes.vt3_nokia.find(p => p[1] < 23.735);
+  P.jkl = along('vt9_jkl', 0.8);
+  P.lakalaiva = lastOf('kehatie_lakalaiva');
 
   const PLACES = [
     { at: P.tarastenjarvi, name: 'Tarastenjärvi', kind: 'industry' },
@@ -118,14 +125,16 @@
         parts: [P.saarenmaa, ...ke2South, P.lentola] }),
       ...both({ layer: 'future', color: BRAND.orange, rate: 0.4, truck: true, from: 2035,
         parts: [from('lentola_vt12'), { vt: [null, J[3]] }, ...ke2North] }),
-      // Ruokakuljetukset Sahalahdelta: Sahalahdentie → Huutijärven etl → vt 12
+      // Ruokakuljetukset Sahalahdelta: Sahalahdentie → Huutijärven etl → vt 12 → Alasjärvi →
+      //  a) Jyväskyläntie (vt 9) Jyväskylän suuntaan
+      //  b) Tampereen itäinen kehätie → Lakalaiva → vt 3 Helsinkiin
       { layer: 'food', color: BRAND.green, rate: 0.7, truck: true,
-        parts: [from('sahalahti_vt12'), VT, to('tarastenjarvi_vt12')] },
-      ...both({ layer: 'food', color: BRAND.green, rate: 0.7, truck: true,
-        parts: [from('sahalahti_vt12'), { vt: [null, sStart] }, P.tampere, P.west] }),
-      // Satamakuljetukset Rauma–Kouvola: vt 12 jatkuu Huutijärveltä Lahden suuntaan
+        parts: [from('sahalahti_vt12'), VT, from('vt9_jkl')] },
+      ...both({ layer: 'food', color: BRAND.green, rate: 0.8, truck: true,
+        parts: [from('sahalahti_vt12'), VT, from('kehatie_lakalaiva'), from('vt3_helsinki')] }),
+      // Satamakuljetukset Rauma/Pori–Kouvola: vt 11/vt 3 Nokialta → Lakalaiva → itäinen kehätie → vt 12 → Lahti
       ...both({ layer: 'port', color: BRAND.yellow, rate: 0.6, truck: true,
-        parts: [P.west, P.tampere, { vt: [sStart, sEnd] }, { osm: 'vt12_east', a: 'prev', b: 'end' }] }),
+        parts: [to('vt3_nokia'), to('kehatie_lakalaiva'), { vt: [null, sEnd] }, { osm: 'vt12_east', a: 'prev', b: 'end' }] }),
       // Lamminrahka–Ojala: kasvava asuinalue, liikenne Lamminrahkan etl:n kautta (kasvaa rakentumisen myötä)
       ...both({ layer: 'growth', color: GROWTH, rate: 1.4, truck: false, ramp: true,
         parts: [from('lamminrahka_vt12'), { vt: [null, sStart] }, P.tampere] }),
@@ -159,9 +168,12 @@
     [R.ring.south, R.ring.southBranch].forEach(ll => L.polyline(ll, ke2Style).bindTooltip('Kehä II Rusko–Lentola (tuleva)').addTo(groups.future));
     L.polyline(R.ring.north, ke2Style).bindTooltip('Kehä II Lentola–Tarastenjärvi (tuleva)').addTo(groups.future);
     // Satamasuunnat
-    [[P.west, 'Rauma · Pori · satamat', 'left'], [P.east, 'Lahti · Kouvola · HaminaKotka', 'right']].forEach(([at, txt, dir]) => {
-      L.marker(at, { icon: L.divIcon({ className: 'edge-arrow edge-arrow--' + dir, html: `<span>${txt}</span>`, iconSize: null }) }).addTo(groups.port);
-    });
+    const edge = (at, txt, dir, g, cls = '') => L.marker(at, { icon: L.divIcon({ className: 'edge-arrow edge-arrow--' + dir + cls, html: `<span>${txt}</span>`, iconSize: null }) }).addTo(g);
+    edge(P.nokia, 'Nokia · Pori · Rauma', 'left', groups.port);
+    edge(P.east, 'Lahti · Kouvola · HaminaKotka', 'right', groups.port);
+    // Ruokakuljetusten suunnat
+    edge(P.helsinki, 'vt 3 Helsinki', 'left', groups.food, ' edge-arrow--food');
+    edge(P.jkl, 'vt 9 Jyväskylä', 'right', groups.food, ' edge-arrow--food');
     Object.values(groups).forEach(g => g.addTo(map));
 
     PLACES.forEach(p => {
@@ -171,7 +183,7 @@
         .addTo(map);
     });
 
-    map.fitBounds(L.latLngBounds([P.tarastenjarvi, P.sahalahti, P.tampere, P.east, [61.445, 23.88]]), { padding: [10, 10] });
+    map.fitBounds(L.latLngBounds([P.tarastenjarvi, P.sahalahti, P.tampere, P.east, P.lakalaiva, P.nokia, [61.445, 23.88]]), { padding: [10, 10] });
 
     // --- Tila -------------------------------------------------------------
     const state = { year: T.startYear, playing: false, four: false, layers: { industry: true, food: true, port: true, cars: true, future: true, growth: true } };
