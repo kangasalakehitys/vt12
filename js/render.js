@@ -36,7 +36,7 @@
          <p class="capchart__unit">ajoneuvoa vuorokaudessa (KVL)</p>`;
     },
     bottleneckBullets: () => li(C.bottleneck.bullets),
-    bottleneckLink: el => { el.href = C.bottleneck.link.href; return esc(C.bottleneck.link.text) + ' ↗'; },
+    bottleneckLink: el => { el.href = C.bottleneck.link.href; return esc(C.bottleneck.link.text) + ' <span aria-hidden="true">↗</span><span class="sr-only">(avautuu uuteen ikkunaan)</span>'; },
     profitBullets: () => li(C.profitability.bullets),
     hkBars: () => {
       const rows = C.profitability.rows, max = 3;
@@ -46,14 +46,14 @@
           <span class="hkbar__val">${dec(r.hk)}</span></div>`).join('') +
         `<div class="hkbar hkbar--axis"><span></span><span class="hkbar__track"><span class="hkbar__one" style="left:${100 / max}%">H/K = 1 kannattavuuden raja</span></span><span></span></div>`;
     },
-    hkTable: () => `<thead><tr><th>Hanke</th><th>Sijainti</th><th class="num">H/K</th><th class="num">Toimivuus</th></tr></thead><tbody>` +
-      C.profitability.rows.map(r => `<tr${r.own ? ' class="is-own"' : ''}><td>${esc(r.name)}</td><td>${esc(r.place)}</td><td class="num">${dec(r.hk)}</td><td class="num">${dec(r.func)}</td></tr>`).join('') + '</tbody>',
+    hkTable: () => `<caption class="sr-only">${esc(C.profitability.tableTitle)}: hyöty-kustannussuhde (H/K) ja toimivuus</caption><thead><tr><th scope="col">Hanke</th><th scope="col">Sijainti</th><th scope="col" class="num">H/K</th><th scope="col" class="num">Toimivuus</th></tr></thead><tbody>` +
+      C.profitability.rows.map(r => `<tr${r.own ? ' class="is-own"' : ''}><th scope="row">${esc(r.name)}</th><td>${esc(r.place)}</td><td class="num">${dec(r.hk)}</td><td class="num">${dec(r.func)}</td></tr>`).join('') + '</tbody>',
     growthBullets: () => li(C.growth.bullets),
     businessBullets: () => li(C.business.bullets),
     envBullets: () => li(C.environment.bullets),
     defenceBullets: () => li(C.defence.bullets),
     partners: () => C.partners.map(p =>
-      `<li style="--s:${(1 / Math.sqrt(p.ar)).toFixed(3)}"><a href="${p.url}" target="_blank" rel="noopener" title="${esc(p.name)} (avautuu uuteen ikkunaan)"><img src="${p.logo}" alt="${esc(p.name)}" loading="eager"></a></li>`).join(''),
+      `<li style="--s:${(1 / Math.sqrt(p.ar)).toFixed(3)}"><a href="${p.url}" target="_blank" rel="noopener" ><img src="${p.logo}" alt="${esc(p.name)} (avautuu uuteen ikkunaan)" loading="eager"></a></li>`).join(''),
     share: () => {
       const url = C.share.url || location.href.split('#')[0];
       const u = encodeURIComponent(url), t = encodeURIComponent(C.share.text);
@@ -98,6 +98,9 @@
       btn.setAttribute('aria-expanded', open); navEl.classList.toggle('is-open', open);
     });
     navEl.addEventListener('click', e => { if (e.target.tagName === 'A') { btn.setAttribute('aria-expanded', 'false'); navEl.classList.remove('is-open'); } });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && navEl.classList.contains('is-open')) { btn.setAttribute('aria-expanded', 'false'); navEl.classList.remove('is-open'); btn.focus(); }
+    });
   }
 
   document.addEventListener('DOMContentLoaded', () => { render(); nav(); shareActions(); });

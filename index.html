@@ -111,7 +111,7 @@
       <div class="wrap wrap--wide">
         <div class="sim" id="simulaatio-vt12">
           <div class="sim__mapwrap">
-            <div class="sim-map" aria-label="Kartta: vt 12 Alasjärvi–Huutijärvi ja liikenteen simulaatio"></div>
+            <div class="sim-map" role="region" aria-label="Kartta: vt 12 Alasjärvi–Huutijärvi ja liikenteen simulaatio" aria-describedby="sim-vt12-alt"></div>
             <div class="sim__yearbadge"><span data-sim="year">2026</span></div>
             <div class="sim__legend">
               <span><i class="dot dot--car"></i>Henkilöauto</span>
@@ -161,6 +161,7 @@
               <div><dt>Raskas liikenne enint.</dt><dd><span data-sim="ras">–</span> <small>ajon./vrk</small></dd></div>
               <div><dt>Palvelutaso <small>(HCM, suuntaa antava)</small></dt><dd data-sim="flow">–</dd></div>
             </dl>
+            <p class="sr-only" id="sim-vt12-alt">Kartta on havainnollistus. Samat tiedot tekstinä: valittu vuosi, vilkkaimman osuuden liikennemäärä, kuormitusaste ja palvelutaso näkyvät tämän paneelin tunnusluvuissa, ja liittymäkohtaiset muutokset löytyvät liittymien ponnahdusikkunoista. Ilman nelikaistaistusta liikenne ylittää 1+1-tien noin 9 000 ajoneuvon vuorokausikapasiteetin koko simulaation ajan.</p>
             <p class="hint">Pysäytä simulaatio, niin liittymien ja tieosuuksien liikennemäärät näkyvät kartalla. Klikkaa liittymää nähdäksesi muutoksen. Autojen hidastuminen ja jonoutuminen kartalla on havainnollistus, ei mallinnettu tulos.</p>
             <button class="link" data-sim="reset">Palauta karttanäkymä</button>
           </div>
@@ -213,18 +214,18 @@
     <section class="section section--tint section--map" id="kasvu">
       <div class="wrap">
         <h2 data-c="growth.title"></h2>
-        <ul class="bullets bullets--cols" data-render="growthBullets"></ul>
+        <ul class="bullets bullets--cols" id="kasvu-alt" data-render="growthBullets"></ul>
       </div>
       <div class="wrap wrap--wide">
         <div class="mapblock" id="kartta-kasvu">
-          <div class="map-box" aria-label="Kartta: kasvualueet ja tulevat liikennehankkeet"></div>
+          <div class="map-box" role="region" aria-label="Kartta: kasvualueet ja tulevat liikennehankkeet" aria-describedby="kasvu-alt"></div>
           <aside class="mapblock__side">
             <fieldset class="toggles"><legend>Näytä kartalla</legend>
               <label class="check"><input type="checkbox" data-maplayer="areas" checked> Kasvualueet</label>
               <label class="check"><input type="checkbox" data-maplayer="ring" checked> 2-kehä (tuleva)</label>
               <label class="check"><input type="checkbox" data-maplayer="tram" checked> Raitiotie ja yhteystarve</label>
             </fieldset>
-            <div class="map-info"><div class="map-card"><h4>Klikkaa kohdetta</h4><p>Valitse kartalta alue tai yhteys nähdäksesi lisätietoa.</p></div></div>
+            <div class="map-info"><div class="map-card"><h3>Klikkaa kohdetta</h3><p>Valitse kartalta alue tai yhteys nähdäksesi lisätietoa.</p></div></div>
           </aside>
         </div>
       </div>
@@ -242,7 +243,7 @@
       <div class="wrap wrap--wide">
         <div class="sim sim--biz" id="simulaatio-elinkeino">
           <div class="sim__mapwrap">
-            <div class="sim-map" aria-label="Kartta: teollisuuden ja ruokakuljetusten liikennevirrat"></div>
+            <div class="sim-map" role="region" aria-label="Kartta: teollisuuden ja ruokakuljetusten liikennevirrat" aria-describedby="sim-biz-alt"></div>
             <div class="sim__yearbadge"><span data-biz="year">2026</span></div>
           </div>
           <div class="sim__panel">
@@ -252,7 +253,7 @@
               <label class="check"><input type="checkbox" data-biz="four"> Vt 12 nelikaistainen</label>
             </div>
             <label class="field">Vuosi
-              <input type="range" min="2026" max="2050" step="0.01" value="2026" data-biz="slider" aria-label="Kuljetussimulaation vuosi">
+              <input type="range" min="2026" max="2050" step="0.01" value="2026" data-biz="slider" aria-label="Kuljetussimulaation vuosi" aria-valuetext="2026">
             </label>
             <fieldset class="toggles"><legend>Liikennevirrat</legend>
               <label class="check"><input type="checkbox" data-layer="industry" checked> <i class="dot dot--truck"></i> Teollisuuden rekat</label>
@@ -262,6 +263,7 @@
               <label class="check"><input type="checkbox" data-layer="growth" checked> <i class="dot dot--growth"></i> Lamminrahka–Ojala (kasvava asuinalue)</label>
               <label class="check"><input type="checkbox" data-layer="future" checked> <i class="dash"></i> Saarenmaa ja Kehä II (tuleva)</label>
             </fieldset>
+            <p class="sr-only" id="sim-biz-alt">Kartalla liikkuvat teollisuuden rekat Kallion, Lentolan, Ruskon, Tarastenjärven ja tulevan Saarenmaan välillä, ruokakuljetukset Sahalahden tehtailta Helsinkiin ja Jyväskylään, satamakuljetukset sekä henkilöautot. Kaikki kulkevat vt 12:n Alasjärvi–Huutijärvi-osuuden kautta, jolla raskasta liikennettä on 650–1 000 ajoneuvoa vuorokaudessa. Kaksikaistaisena tie ruuhkautuu ja hidastaa kuljetuksia.</p>
             <p class="hint">Reitit ja sijainnit ovat karkeita. Saarenmaan liikenne alkaa simulaatiossa 2032 ja Kehä II:n pohjoinen jatke 2035.</p>
           </div>
         </div>
@@ -272,11 +274,11 @@
     <section class="section section--tint section--map" id="ymparisto">
       <div class="wrap">
         <h2 data-c="environment.title"></h2>
-        <ul class="bullets bullets--cols" data-render="envBullets"></ul>
+        <ul class="bullets bullets--cols" id="ymparisto-alt" data-render="envBullets"></ul>
       </div>
       <div class="wrap wrap--wide">
         <div class="mapblock" id="kartta-ymparisto">
-          <div class="map-box" aria-label="Koontikartta: melusuojaus, pyörätie, Natura-alue ja Kangasalantie"></div>
+          <div class="map-box" role="region" aria-label="Koontikartta: melusuojaus, pyörätie, Natura-alue ja Kangasalantie" aria-describedby="ymparisto-alt"></div>
           <aside class="mapblock__side">
             <fieldset class="toggles"><legend>Näytä kartalla</legend>
               <label class="check"><input type="checkbox" data-maplayer="noise" checked> <i class="bar bar--orange"></i> Melusuojaustarve (suuntaa antava)</label>
@@ -284,7 +286,7 @@
               <label class="check"><input type="checkbox" data-maplayer="natura" checked> <i class="bar bar--green"></i> Kirkkojärven Natura-alue</label>
               <label class="check"><input type="checkbox" data-maplayer="st339" checked> <i class="bar bar--cyan"></i> Kangasalantie (st 339)</label>
             </fieldset>
-            <div class="map-info"><div class="map-card"><h4>Koontikartta</h4><p>Kohteet on esitetty karkeasti. Melusuojausosuudet ovat suuntaa antavia. Ulkoilureittien alikulkujen ja pieneläintunnelien sijainnit tarkentuvat tiesuunnitelmassa. Klikkaa kohdetta nähdäksesi lisätietoa.</p></div></div>
+            <div class="map-info"><div class="map-card"><h3>Koontikartta</h3><p>Kohteet on esitetty karkeasti. Melusuojausosuudet ovat suuntaa antavia. Ulkoilureittien alikulkujen ja pieneläintunnelien sijainnit tarkentuvat tiesuunnitelmassa. Klikkaa kohdetta nähdäksesi lisätietoa.</p></div></div>
           </aside>
         </div>
       </div>
@@ -297,7 +299,7 @@
           <h2 data-c="defence.title"></h2>
           <ul class="bullets" data-render="defenceBullets"></ul>
         </div>
-        <div class="tags" aria-label="Käytävät"><span>TEN-T</span><span>E16</span><span>Milmob</span><span>Rauma–Kouvola</span></div>
+        <ul class="tags" aria-label="Käytävät"><li>TEN-T</li><li>E16</li><li>Milmob</li><li>Rauma–Kouvola</li></ul>
       </div>
     </section>
 
@@ -325,7 +327,7 @@
   <footer class="footer">
     <div class="wrap footer__in">
       <img src="assets/logos/Kangasala_logo_slogan_RGB_white.svg" alt="Kangasala" class="footer__logo">
-      <p><span data-c="closing.contact"></span><br><small>Karttapohja © OpenStreetMap-tekijät. Kohteiden sijainnit ovat suuntaa antavia.</small></p>
+      <p><span data-c="closing.contact"></span><br><small>Karttapohja © OpenStreetMap-tekijät. Kohteiden sijainnit ovat suuntaa antavia.</small><br><a class="footer__link" href="saavutettavuus.html">Saavutettavuusseloste</a></p>
     </div>
   </footer>
 

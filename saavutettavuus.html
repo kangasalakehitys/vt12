@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saavutettavuusseloste – Vt 12 Alasjärvi–Huutijärvi</title>
+  <meta name="description" content="Vt 12 Alasjärvi–Huutijärvi -sivuston saavutettavuusseloste ja saavutettavuusanalyysi.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#sisalto">Siirry sisältöön</a>
+
+  <header class="topbar">
+    <div class="wrap topbar__in">
+      <a href="index.html" class="topbar__logo" aria-label="Etusivu: Vt 12 Alasjärvi–Huutijärvi"><img src="assets/logos/Kangasala_logo_RGB_color.svg" alt="Kangasala"></a>
+      <nav class="nav nav--static" aria-label="Päävalikko">
+        <a href="index.html">← Takaisin etusivulle</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="sisalto">
+    <section class="section">
+      <div class="wrap a11y">
+        <h1>Saavutettavuusseloste</h1>
+        <p class="lead">Tämä saavutettavuusseloste koskee Kangasalan kaupungin sivustoa <strong>Vt 12 Alasjärvi–Huutijärvi – Suomen kannattavin yhteysvälihanke</strong>. Seloste on laadittu 23.11.2026.</p>
+        <p>Kangasalan kaupungin pääsivuston seloste on osoitteessa <a href="https://www.kangasala.fi/saavutettavuusseloste/">kangasala.fi/saavutettavuusseloste</a>.</p>
+
+        <h2>Digipalvelun saavutettavuuden tila</h2>
+        <p class="a11y__status"><strong>Täyttää saavutettavuusvaatimukset osittain.</strong></p>
+        <p>Sivuston tekstisisältö, navigointi, lomakeohjaimet ja taulukot täyttävät Verkkosisällön saavutettavuusohjeiden (WCAG) 2.1 -tason AA vaatimukset. Interaktiivisissa kartoissa ja karttasimulaatioissa on alla kuvattuja puutteita.</p>
+
+        <h2>Ei-saavutettava sisältö</h2>
+        <h3>1. Ei kuulu lainsäädännön piiriin</h3>
+        <ul class="bullets">
+          <li>Navigointiin tarkoittamattomat kartat: sivuston kartat ja liikennesimulaatiot ovat havainnollistuksia. Niiden keskeinen sisältö on kerrottu myös tekstinä (ks. Vaihtoehtoiset tavat saada tieto).</li>
+          <li>OpenStreetMap-karttapohja on kolmannen osapuolen sisältöä, jonka värejä ja kontrastia ei voi muuttaa.</li>
+        </ul>
+
+        <h3>2. Sivusto ei ole vielä kaikilta osin vaatimusten mukainen</h3>
+        <h4>Interaktiiviset kartat ja simulaatiot</h4>
+        <ul class="bullets">
+          <li>Karttakohteita (liittymät, alueet, reitit) ei voi valita ruudunlukijalla tai kaikilta osin näppäimistöllä, eikä kartalla liikkuvien autojen määrää kuvata reaaliaikaisesti tekstinä. <em>WCAG 1.1.1 Ei-tekstuaalinen sisältö, 2.1.1 Näppäimistö.</em></li>
+          <li>Ruuhkan vakavuus esitetään kartalla väreillä (vihreä, keltainen, oranssi, punainen). Sama tieto on simulaation tilarivillä ja tunnusluvuissa tekstinä. <em>WCAG 1.4.1 Värien käyttö, 1.4.11 Muun kuin tekstisisällön kontrasti.</em></li>
+          <li>Simulaatio käynnistyy automaattisesti, kun se tulee näkyviin. Sen voi pysäyttää Pysäytä-painikkeella. Jos käyttöjärjestelmässä on valittu vähennetty liike, simulaatio ei käynnisty itsestään. <em>WCAG 2.2.2 Pysäytä, keskeytä, piilota (täyttyy).</em></li>
+        </ul>
+        <h4>Ladattavat tiedostot</h4>
+        <ul class="bullets">
+          <li>Ladattavan PowerPoint-esityksen saavutettavuutta ei ole tarkistettu. Esityksen sisältö löytyy kokonaisuudessaan tältä sivustolta tekstinä. <em>WCAG 1.1.1, 1.3.1 Informaatio ja suhteet.</em></li>
+        </ul>
+        <p>Puutteita korjataan sivuston jatkokehityksen yhteydessä.</p>
+
+        <h2>Vaihtoehtoiset tavat saada tieto</h2>
+        <ul class="bullets">
+          <li>Liikennemäärät, kapasiteetti ja ennusteet on kerrottu tekstinä Liikenne-osiossa ja simulaation tunnusluvuissa (vilkkain osuus, kuormitusaste, raskas liikenne, palvelutaso).</li>
+          <li>Hankkeiden hyöty-kustannussuhteet ovat taulukkona Kannattavuus-osiossa.</li>
+          <li>Karttojen kohteet on kuvattu osioiden luettelossa (Kasvu, Elinkeinot, Ympäristö).</li>
+          <li>Tiedot saa pyydettäessä myös muussa muodossa kaupungin kirjaamosta.</li>
+        </ul>
+
+        <h2>Saavutettavuusanalyysi</h2>
+        <p>Sivuston saavutettavuus on arvioitu itsearviointina 23.11.2026: automaattinen tarkistus Lighthouse 13.5.0 -työkalulla (Chromium 157, työpöytäemulaatio) sekä käsin tehdyt tarkistukset.</p>
+
+        <h3>Automaattinen tarkistus (Lighthouse)</h3>
+        <ul class="a11y__stats">
+          <li><strong>32</strong><span>läpäistyä testiä</span></li>
+          <li><strong>1</strong><span>hylätty testi – korjattu</span></li>
+          <li><strong>30</strong><span>ei sovellettavissa</span></li>
+        </ul>
+        <div class="table-wrap">
+          <table class="table">
+            <caption class="sr-only">Lighthouse-tarkistuksen hylätty kohta ja sen korjaus</caption>
+            <thead><tr><th scope="col">Havainto</th><th scope="col">Syy</th><th scope="col">Korjaus</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Otsikot eivät ole järjestyksessä</th><td>Karttojen tietokorteissa ja liittymien ponnahdusikkunoissa oli h4-otsikko suoraan h2-osion alla.</td><td>Otsikot muutettu h3-tasolle. Ulkoasu ennallaan.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="source">Läpäistyjä testejä ovat mm. värikontrasti, kuvien tekstivastineet, painikkeiden ja linkkien nimet, lomakekenttien nimiöt, sivun kieli, ohituslinkki, main-maamerkki ja zoomauksen salliminen.</p>
+
+        <h3>Käsin tehdyt tarkistukset</h3>
+        <div class="table-wrap">
+          <table class="table">
+            <caption class="sr-only">Käsin tarkistettavat kohdat, niiden tila ja toimenpiteet</caption>
+            <thead><tr><th scope="col">Tarkistettava kohta</th><th scope="col">Tila</th><th scope="col">Havainto ja toimenpide</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Ohjaimet saa kohdistettua näppäimistöllä</th><td><span class="tag tag--ok">Kunnossa</span></td><td>Valikko, simulaatioiden painikkeet, liukusäätimet ja valintaruudut ovat natiiveja HTML-ohjaimia, joissa on näkyvä kohdistuskehys.</td></tr>
+              <tr><th scope="row">Elementit kertovat tarkoituksensa ja tilansa</th><td><span class="tag tag--ok">Korjattu</span></td><td>Käynnistä/Pysäytä-painikkeessa on aria-pressed-tila ja valikkopainikkeessa aria-expanded. Elinkeinosimulaation vuosisäädin ilmoittaa nyt vuoden kokonaislukuna.</td></tr>
+              <tr><th scope="row">Looginen sarkainjärjestys</th><td><span class="tag tag--ok">Kunnossa</span></td><td>Järjestys seuraa ulkoasua: ohituslinkki, valikko, kumppanit ja osiot ylhäältä alas.</td></tr>
+              <tr><th scope="row">Visuaalinen järjestys vastaa DOM-järjestystä</th><td><span class="tag tag--ok">Kunnossa</span></td><td>Asettelu tehdään gridillä ja flexillä ilman järjestyksen muuttamista.</td></tr>
+              <tr><th scope="row">Kohdistus ei jää ansaan</th><td><span class="tag tag--ok">Korjattu</span></td><td>Kartta ei sieppaa vieritystä ennen klikkausta. Mobiilivalikon saa nyt suljettua Esc-näppäimellä, ja kohdistus palaa valikkopainikkeeseen. Ohituslinkki näkyy nyt yläpalkin päällä.</td></tr>
+              <tr><th scope="row">Kohdistus ohjataan uuteen sisältöön</th><td><span class="tag tag--ok">Kunnossa</span></td><td>Simulaation tilan muutokset luetaan aria-live-alueelta. Sivulla ei ole modaali-ikkunoita.</td></tr>
+              <tr><th scope="row">HTML5-maamerkit</th><td><span class="tag tag--ok">Korjattu</span></td><td>Sivulla on header, nav, main ja footer. Kartoille on lisätty region-rooli ja nimi.</td></tr>
+              <tr><th scope="row">Näkymätön sisältö on piilotettu avustavilta teknologioilta</th><td><span class="tag tag--ok">Kunnossa</span></td><td>Suljettu mobiilivalikko piilotetaan display: none -määrityksellä. Kaavioiden visuaaliset osat ovat role="img"-elementin sisällä.</td></tr>
+              <tr><th scope="row">Mukautetuilla ohjaimilla on nimet</th><td><span class="tag tag--ok">Korjattu</span></td><td>Kartoilla on nimi ja tekstikuvaus (aria-describedby). Uuteen ikkunaan avautuvat linkit kertovat sen myös ruudunlukijalle. Käytävätunnisteet on muutettu luetteloksi.</td></tr>
+              <tr><th scope="row">Mukautetuilla ohjaimilla on ARIA-roolit</th><td><span class="tag tag--warn">Rajoitus</span></td><td>Leaflet-karttojen kohteet (liittymät, alueet) eivät ole täysin saavutettavia ohjaimia. Ks. Ei-saavutettava sisältö.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Muut korjaukset</h3>
+        <ul class="bullets">
+          <li>Kannattavuustaulukkoon on lisätty otsikko (caption) sekä sarake- ja riviotsikot.</li>
+          <li>Simulaatioille on lisätty tekstivastine, joka kertoo kartan keskeisen sisällön.</li>
+        </ul>
+
+        <h2>Huomasitko saavutettavuuspuutteen digipalvelussamme? Kerro se meille ja teemme parhaamme puutteen korjaamiseksi</h2>
+        <ul class="bullets">
+          <li><strong>Verkkolomakkeella:</strong> <a href="https://louhi-kangasala.sitowise.com/palaute">anna saavutettavuuspalautetta palautelomakkeella</a></li>
+          <li><strong>Sähköpostilla:</strong> <a href="mailto:kirjaamo@kangasala.fi">kirjaamo@kangasala.fi</a></li>
+          <li><strong>Postitse:</strong> Kaupunginvirasto 1, Kunnantie 1, PL 50, 36201 Kangasala</li>
+          <li><strong>Puhelimitse:</strong> kaupungin vaihde <a href="tel:+358356553000">03 5655 3000</a></li>
+        </ul>
+
+        <h2>Valvontaviranomainen</h2>
+        <p>Jos huomaat sivustolla saavutettavuusongelmia, anna ensin palautetta meille eli sivuston ylläpitäjälle. Vastauksessa voi mennä 14 päivää. Jos et ole tyytyväinen saamaasi vastaukseen tai et saa vastausta lainkaan kahden viikon aikana, voit tehdä ilmoituksen Liikenne- ja viestintävirasto Traficomiin. Traficomin sivuilla kerrotaan tarkasti, <a href="https://www.saavutettavuusvaatimukset.fi/fi/kayttajan-oikeudet/tee-saavutettavuuskantelu-tai-pyyda-selvitysta">miten ilmoituksen voi tehdä ja miten asia käsitellään</a>.</p>
+
+        <h2>Valvontaviranomaisen yhteystiedot</h2>
+        <p>Liikenne- ja viestintävirasto Traficom<br>
+          Digitaalisen esteettömyyden ja saavutettavuuden valvontayksikkö<br>
+          <a href="https://www.saavutettavuusvaatimukset.fi">www.saavutettavuusvaatimukset.fi</a><br>
+          saavutettavuus(at)traficom.fi<br>
+          puhelinnumero vaihde 029 534 5000<br>
+          PL 320, 00059 TRAFICOM</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__in">
+      <img src="assets/logos/Kangasala_logo_slogan_RGB_white.svg" alt="Kangasala" class="footer__logo">
+      <p>Kangasalan kaupunki · kangasala.fi<br><a class="footer__link" href="index.html">Vt 12 Alasjärvi–Huutijärvi – etusivu</a></p>
+    </div>
+  </footer>
+</body>
+</html>

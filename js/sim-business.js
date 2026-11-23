@@ -266,6 +266,7 @@
     function refresh() {
       ui.year.textContent = Math.floor(state.year);
       ui.slider.value = state.year;
+      ui.slider.setAttribute('aria-valuetext', Math.floor(state.year));
       const load = vtLoad();
       projLine.setStyle({ color: state.four ? BRAND.green : BRAND.red, weight: state.four ? 9 : 5 });
       ui.status.className = 'sim-status ' + (state.four ? 'is-good' : 'is-bad');

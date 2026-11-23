@@ -421,7 +421,7 @@
       if (segIn) row('Vt 12 länteen', segIn);
       if (segOut) row('Vt 12 itään', segOut);
       j.branches.forEach((b, k) => row(`Liittyvä tie ${k + 1}`, b));
-      return `<div class="sim-popup"><h4>${j.name}</h4><p>KVL ajon./vrk</p>
+      return `<div class="sim-popup"><h3>${j.name}</h3><p>KVL ajon./vrk</p>
         <table><thead><tr><th></th><th>2026</th><th>${y}</th><th>muutos</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
     }
 

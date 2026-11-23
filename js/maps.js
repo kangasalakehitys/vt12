@@ -6,7 +6,7 @@
   const R = window.ROADS;   // OSM-geometriat (data/roads.js)
   const JL = id => { const j = T.junctions.find(x => x.id === id); return [j.lat, j.lng]; };
 
-  function card(title, body) { return `<div class="map-card"><h4>${title}</h4><p>${body}</p></div>`; }
+  function card(title, body) { return `<div class="map-card"><h3>${title}</h3><p>${body}</p></div>`; }
 
   function layerToggles(root, map, groups) {
     root.querySelectorAll('[data-maplayer]').forEach(cb => cb.addEventListener('change', () => {
