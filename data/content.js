@@ -14,7 +14,7 @@
     partners: [
       { name: 'Kangasalan kaupunki', url: 'https://www.kangasala.fi/vt-12-alasjarvi-huutijarvi/', logo: 'assets/logos/partners/kangasala.png', ar: 4.68 },
       { name: 'Tampereen kaupunki', url: 'https://www.tampere.fi/', logo: 'assets/logos/partners/tampere.png', ar: 4.32 },
-      { name: 'Pälkäneen kunta', url: 'https://www.palkane.fi/', logo: 'assets/logos/partners/palkane.png', ar: 1.33 },
+      { name: 'Pälkäneen kunta', url: 'https://www.palkane.fi/', logo: 'assets/logos/partners/palkane.png', ar: 4.94 },
       { name: 'Pirkanmaan liitto', url: 'https://www.pirkanmaa.fi/', logo: 'assets/logos/partners/pirkanmaa.png', ar: 5.41 },
       { name: 'Tampereen kauppakamari', url: 'https://tampereenkauppakamari.fi/', logo: 'assets/logos/partners/tampereen-kauppakamari.png', ar: 4.03 },
       { name: 'Business Kangasala', url: 'https://www.businesskangasala.fi/', logo: 'assets/logos/partners/business-kangasala.png', ar: 2.63 }
